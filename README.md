@@ -8,5 +8,4 @@ All the apps related to the pilot phase of UET-Agritech project are maintained i
     4. Owner App No.2 - Sensor and Location Data Collection and Dispatch App
     5. Web Dashboard
 
-The UI/UX requirements for the apps are given in the following Google Drive document link:
-https://docs.google.com/document/d/1OEp6CLZ5_9IuYyiruz8BC3Y1_eBhuqtkOkUz860zCAs/
+The UI/UX requirements for the apps are given in the wiki.
