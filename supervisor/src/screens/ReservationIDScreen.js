@@ -11,7 +11,9 @@ class ReservationIDScreen extends Component {
   };
 
   static navigationOptions = {
-    title: 'Reservation ID'
+    headerStyle: {
+      backgroundColor: '#3CB371'
+    }
   };
 
   handleTextInputChange = text => {
@@ -85,7 +87,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF'
   },
   banner: {
-    color: 'green',
+    color: '#3CB371',
     fontSize: 30,
     textAlign: 'center',
     margin: 50
@@ -96,10 +98,11 @@ const styles = StyleSheet.create({
     margin: 4
   },
   input: {
-    height: 60,
+    height: 50,
     width: Dimensions.get('window').width - 100,
     padding: 10,
     margin: 10,
+    borderRadius: 6,
     borderColor: 'gray',
     borderWidth: 1,
     textAlign: 'center',
@@ -115,15 +118,19 @@ const styles = StyleSheet.create({
     padding: 10
   },
   button: {
-    height: 40,
-    width: 100,
+    height: 50,
+    width: 250,
     margin: 10,
-    backgroundColor: 'green',
+    borderRadius: 6,
+    backgroundColor: '#3CB371',
     alignItems: 'center'
   },
   buttonText: {
     color: 'white',
-    fontSize: 15,
-    padding: 10
+    fontSize: 18,
+    fontWeight: 'normal',
+    lineHeight: 40,
+    alignItems: 'center',
+    textAlign: 'center'
   }
 });
