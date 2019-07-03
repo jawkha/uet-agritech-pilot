@@ -3,7 +3,7 @@ export const questions = [
     name: 'machineryType',
     title: 'Machinery Type',
     questionText: 'Please select the machinery type used for this task',
-    choices: ['Tractor', 'Cultivator', 'Cultipacker', 'Baler', 'Plough', 'Rotator']
+    choices: ['Cultivator', 'Leveler', 'Rotavator', 'Disc Harrow']
   },
   {
     name: 'soilType',
@@ -16,7 +16,7 @@ export const questions = [
     title: 'Irrigation Source',
     questionText:
       'Please select the irrigation source for the land where this task is being carried out',
-    choices: ['Rainwater', 'Groundwater', 'River']
+    choices: ['Canal Water', 'Tube Well', 'Rain Water']
   },
   {
     name: 'lastCropSown',
