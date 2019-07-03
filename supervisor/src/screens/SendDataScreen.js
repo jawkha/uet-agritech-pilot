@@ -40,7 +40,7 @@ class SendDataScreen extends Component {
 
   handlePressSendDataToServer = () => {
     const data = this.dataToDispatch;
-    const API = 'https://1mbkayr1u6.execute-api.ap-south-1.amazonaws.com/dev/data';
+    const API = 'https://ss1mo0y797.execute-api.us-east-1.amazonaws.com/dev/data';
 
     return fetch(API, {
       method: 'POST',
