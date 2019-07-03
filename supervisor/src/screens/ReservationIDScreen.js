@@ -6,7 +6,7 @@ class ReservationIDScreen extends Component {
     welcomeMessage: 'Please provide the Reservation ID for this task',
     reservationID: '',
     errorMessage:
-      'Please check your reservation details and try again. The Reservation ID provided is invalid. It should be an 8-letter word within the reservation document.',
+      'Please check your reservation details and try again. The Reservation ID provided is invalid.',
     displayErrorMessage: false
   };
 
@@ -34,7 +34,7 @@ class ReservationIDScreen extends Component {
      * the Reservation ID.
      */
     const id = this.state.reservationID;
-    if (id && id.length === 8) {
+    if (id && id.length > 0) {
       console.log(`Reservation ID ${id} is a valid reservation id.`);
       return true;
     } else {
