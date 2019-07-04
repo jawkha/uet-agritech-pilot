@@ -29,11 +29,5 @@ export const questions = [
     title: 'Next Crop To Be Sown',
     questionText: 'Please input the name of the next crop to be sown on this piece of land',
     choices: null
-  },
-  {
-    name: 'fuelUsed',
-    title: 'Fuel Usage',
-    questionText: 'Please input the quantity of fuel in litres consumed while doing this task',
-    choices: null
   }
 ];
