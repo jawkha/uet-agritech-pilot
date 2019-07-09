@@ -1,0 +1,254 @@
+import React, { Component } from 'react';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Dimensions } from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
+
+class LoginScreen extends Component {
+  state = {
+    cnic: '1330201777553',
+    password: '12345',
+    errorMessage:
+      'Please check your login details and try again. The credentials provided are invalid.',
+    displayErrorMessage: false
+  };
+
+  static navigationOptions = {
+    headerStyle: {
+      backgroundColor: '#3CB371'
+    }
+  };
+
+  handleCnicInputChange = text => {
+    /**
+     * We are using a RegEx to prevent the user from entering non-digit characters
+     * since we know the CNIC numbers in Pakistan are made up of only numeric characters.
+     */
+    this.setState(
+      { displayErrorMessage: false, cnic: text.replace(/\D/g, '') },
+      () => {}
+      // console.log(this.state.cnic)
+    );
+  };
+
+  handlePasswordInputChange = text => {
+    /**
+     * We are using a RegEx to prevent the user from entering white space since
+     * the password is expected to be a string of non-white space characters.
+     */
+    this.setState(
+      { displayErrorMessage: false, password: text.replace(/\s/g, '') },
+      () => {}
+      // console.log(this.state.password)
+    );
+  };
+
+  isValidCNIC = () => {
+    /**
+     * Provide validation parameters for the CNIC here
+     * For now, it only checks that the ID string has a length of 13 numeric characters
+     * Also, make sure the error message is updated to reflect the requirements of
+     * the CNIC.
+     */
+    const cnic = this.state.cnic;
+    if (cnic && cnic.length === 13) {
+      console.log(
+        `Performing basic validation on the provided CNIC. CNIC ${cnic} has 13 digits and should be sent to the server for further validation.`
+      );
+      return true;
+    } else {
+      this.setState({ displayErrorMessage: true });
+      return false;
+    }
+  };
+
+  handlePress = async => {
+    this.setState({ displayErrorMessage: false });
+
+    const baseUrl = `http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/farmerAuthentication.php`;
+    const { cnic, password } = this.state;
+    const constructedUrl = `${baseUrl}?cnic=${cnic}&pwd=${password}`;
+
+    if (this.isValidCNIC() === true) {
+      /**
+       * Here we first confirm that the user is connected to the internet and
+       * that a network request can be made for user login.
+       */
+      return NetInfo.fetch().then(NetInfoState => {
+        console.log('Connection type', NetInfoState);
+        console.log('Is connected?', NetInfoState.isConnected);
+        if (NetInfoState.isConnected === false) {
+          this.setState({
+            errorMessage:
+              'You do not seem to be connected to the internet. Please check your connection settings and try again.',
+            displayErrorMessage: true
+          });
+        } else {
+          console.log('Connected to internet');
+          return fetch(constructedUrl)
+            .then(response => response.json())
+            .then(data => {
+              console.log({ data });
+              if (data.success === 0) {
+                this.setState({
+                  errorMessage:
+                    'The login credentials are incorrect. Please try again using the correct CNIC and password combination.',
+                  displayErrorMessage: true
+                });
+              } else {
+                console.log('Login successful');
+                const { navigation } = this.props;
+                navigation.navigate('Choices', {
+                  cnic: this.state.cnic,
+                  userProfileData: data.farmer[0]
+                });
+              }
+            });
+        }
+      });
+    }
+  };
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.banner}>Service Recipient</Text>
+        <TextInput
+          style={styles.cnicInput}
+          onChangeText={this.handleCnicInputChange}
+          value={this.state.cnic}
+          placeholder="CNIC"
+          placeholderTextColor="#3CB371"
+          autoFocus
+          autoCapitalize="none"
+          autoCorrect={false}
+        />
+        <TextInput
+          style={styles.passwordInput}
+          onChangeText={this.handlePasswordInputChange}
+          value={this.state.password}
+          placeholder="PASSWORD"
+          placeholderTextColor="#3CB371"
+          secureTextEntry
+          textContentType="password"
+          autoCapitalize="none"
+          autoCorrect={false}
+        />
+        <TouchableOpacity style={styles.button} onPress={this.handlePress}>
+          <Text style={styles.buttonText}>LOGIN</Text>
+        </TouchableOpacity>
+        {this.state.displayErrorMessage && (
+          <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
+        )}
+      </View>
+    );
+  }
+}
+
+export default LoginScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF'
+  },
+  banner: {
+    color: '#3CB371',
+    fontSize: 30,
+    textAlign: 'center',
+    margin: 50
+  },
+  cnicInput: {
+    height: 50,
+    width: Dimensions.get('window').width - 100,
+    padding: 10,
+    margin: 10,
+    borderRadius: 6,
+    borderColor: '#3CB371',
+    borderWidth: 1,
+    textAlign: 'center',
+    fontSize: 18,
+    color: '#3CB371',
+    fontWeight: 'normal',
+    letterSpacing: 5
+  },
+  passwordInput: {
+    height: 50,
+    width: Dimensions.get('window').width - 100,
+    padding: 10,
+    margin: 10,
+    borderRadius: 6,
+    borderColor: '#3CB371',
+    borderWidth: 1,
+    textAlign: 'center',
+    fontSize: 18,
+    color: '#3CB371',
+    fontWeight: 'normal'
+  },
+  errorMessage: {
+    fontSize: 14,
+    textAlign: 'center',
+    color: 'red',
+    margin: 20,
+    padding: 10
+  },
+  button: {
+    height: 50,
+    width: 250,
+    marginTop: 10,
+    borderRadius: 6,
+    backgroundColor: '#3CB371',
+    alignItems: 'center'
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'normal',
+    lineHeight: 45,
+    alignItems: 'center',
+    textAlign: 'center'
+  }
+});
+
+/**
+ * const data = this.dataToDispatch;
+    const API = 'https://ss1mo0y797.execute-api.us-east-1.amazonaws.com/dev/data';
+
+    return NetInfo.fetch().then(NetInfoState => {
+      console.log('Connection type', NetInfoState);
+      console.log('Is connected?', NetInfoState.isConnected);
+      if (NetInfoState.isConnected === false) {
+        this.setState({
+          errorMessage:
+            'You do not seem to be connected to the internet. Please check your connection settings and try again.'
+        });
+      } else {
+        console.log('Connected to internet');
+        return fetch(API, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            if (data.message === 'File successfully uploaded to S3') {
+              const { navigation } = this.props;
+              const reservationID = navigation.getParam('reservationID');
+              navigation.navigate('Confirmation', {
+                reservationID
+              });
+            } else {
+              this.setState({
+                errorMessage:
+                  'An error occurred in storing the data in our servers. Please press the SEND DATA button to attempt sending the data again.'
+              });
+            }
+          })
+          .catch(err => console.error(err));
+      }
+    });
+ */

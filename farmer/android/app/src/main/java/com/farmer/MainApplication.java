@@ -3,6 +3,9 @@ package com.farmer;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactcommunity.rndatetimepicker.RNDateTimePickerPackage;
+import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+import com.reactnativecommunity.netinfo.NetInfoPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -21,8 +24,11 @@ public class MainApplication extends Application implements ReactApplication {
 
     @Override
     protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(
-          new MainReactPackage()
+      return Arrays.asList(
+          new MainReactPackage(),
+            new RNDateTimePickerPackage(),
+          new NetInfoPackage(),
+            new RNGestureHandlerPackage()
       );
     }
 
