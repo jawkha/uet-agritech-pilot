@@ -3,7 +3,7 @@ package com.farmer;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.reactcommunity.rndatetimepicker.RNDateTimePickerPackage;
+import com.henninghall.date_picker.DatePickerPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.reactnativecommunity.netinfo.NetInfoPackage;
 import com.facebook.react.ReactNativeHost;
@@ -26,7 +26,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.asList(
           new MainReactPackage(),
-            new RNDateTimePickerPackage(),
+            new DatePickerPackage(),
           new NetInfoPackage(),
             new RNGestureHandlerPackage()
       );

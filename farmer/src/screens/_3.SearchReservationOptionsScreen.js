@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-  Platform,
   StyleSheet,
   Dimensions,
   ScrollView,
@@ -10,7 +9,7 @@ import {
   Picker,
   TouchableOpacity
 } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DatePicker from 'react-native-date-picker';
 
 import { machineryTypeDropdownChoices } from './../data/machineryTypeDropdownChoices';
 
@@ -21,8 +20,9 @@ class SearchReservationOptionsScreen extends Component {
     sizeOfLandInHectares: '',
     startDateAndTimeForMachineryUse: new Date(),
     endDateAndTimeForMachineryUse: new Date(),
-    show: false,
-    mode: 'date'
+    showStartDateTimePicker: false,
+    showEndDateTimePicker: false,
+    displayErrorMessage: false
   };
 
   static navigationOptions = {
@@ -40,50 +40,47 @@ class SearchReservationOptionsScreen extends Component {
     return data;
   }
 
-  renderDateInHumanReadableFormat = date => {
-    let humanReadableDate = `${date.getDay()}-${date.getMonth() + 1}-${date.getFullYear()}`;
-    return humanReadableDate;
+  toggleStartDateTimePicker = () => {
+    this.setState(
+      {
+        showStartDateTimePicker: !this.state.showStartDateTimePicker,
+        showEndDateTimePicker: false
+      },
+      () => console.log(this.state.startDateAndTimeForMachineryUse)
+    );
   };
 
-  renderTimeInHumanReadableFormat = date => {
-    let humanReadableTime = `${date.getHours()}:${date.getMinutes()}`;
-    return humanReadableTime;
-  };
-
-  setDate = (event, date) => {
-    date = date || this.state.date;
-
+  toggleEndDateTimePicker = () => {
     this.setState({
-      show: false,
-      date
+      showEndDateTimePicker: !this.state.showEndDateTimePicker,
+      showStartDateTimePicker: false
     });
   };
 
-  show = mode => {
-    this.setState({
-      show: true,
-      mode
-    });
+  handleStartDateTimeChange = date => {
+    this.setState({ startDateAndTimeForMachineryUse: date });
   };
 
-  datepicker = () => {
-    this.show('date');
+  handleEndDateTimeChange = date => {
+    this.setState({ endDateAndTimeForMachineryUse: date });
   };
 
-  timepicker = () => {
-    this.show('time');
+  handleButtonPress = () => {
+    console.log('Button pressed');
   };
 
   render() {
     return (
       <ScrollView contentContainerStyle={styles.contentContainer}>
-        <View style={styles.questionContainer}>
+        {/* ============CNIC================================== */}
+        {/* <View style={styles.questionContainer}>
           <Text style={styles.questionTitle}>CNIC</Text>
           <Text style={styles.questionText}>
             The CNIC you input when logging in has been given here. Please do not try to change it.
           </Text>
           <TextInput style={styles.textInput} value={this.state.cnic} editable={false} />
-        </View>
+        </View> */}
+        {/* ============MACHINERY TYPE======================= */}
         <View style={styles.questionContainer}>
           <Text style={styles.questionTitle}>MACHINERY TYPE</Text>
           <Text style={styles.questionText}>
@@ -92,7 +89,7 @@ class SearchReservationOptionsScreen extends Component {
           <Picker
             mode="dropdown"
             selectedValue={this.state.machineryType}
-            style={styles.picker}
+            style={styles.machineryPicker}
             onValueChange={(value, index) =>
               this.setState({ machineryType: value }, () => console.log(this.state))
             }
@@ -102,6 +99,7 @@ class SearchReservationOptionsScreen extends Component {
             })}
           </Picker>
         </View>
+        {/* ============SIZE OF LAND======================= */}
         <View style={styles.questionContainer}>
           <Text style={styles.questionTitle}>SIZE OF LAND</Text>
           <Text style={styles.questionText}>
@@ -120,56 +118,66 @@ class SearchReservationOptionsScreen extends Component {
             autoCorrect={false}
           />
         </View>
+        {/* ============START DATE AND TIME=================== */}
         <View style={styles.questionContainer}>
           <Text style={styles.questionTitle}>START DATE FOR MACHINERY USE</Text>
           <Text style={styles.questionText}>
             Please provide the date and time when the work is scheduled to begin.
           </Text>
-          <View style={styles.dateAndTimeContainer}>
-            <Text style={styles.dateText} onPress={this.datepicker}>
-              {this.renderDateInHumanReadableFormat(this.state.startDateAndTimeForMachineryUse)}
-            </Text>
-            <Text style={styles.timeText} onPress={this.timepicker}>
-              {this.renderTimeInHumanReadableFormat(this.state.startDateAndTimeForMachineryUse)}
-            </Text>
-            {this.state.show && (
-              <DateTimePicker
-                style={styles.datePickerModal}
-                value={this.state.startDateAndTimeForMachineryUse}
-                mode={this.state.mode}
-                is24Hour={true}
-                display="default"
-                onChange={this.setDate}
-                minimumDate={Date.now()}
-              />
-            )}
-          </View>
+
+          <Text style={styles.dateText} onPress={this.toggleStartDateTimePicker}>
+            {/* {this.renderDateInHumanReadableFormat(this.state.startDateAndTimeForMachineryUse)} */}
+            {`${this.state.startDateAndTimeForMachineryUse.toDateString()} ${this.state.startDateAndTimeForMachineryUse
+              .toTimeString()
+              .substr(0, 5)}`}
+          </Text>
         </View>
+        <View style={styles.dateTimePickerContainer}>
+          {this.state.showStartDateTimePicker && (
+            <DatePicker
+              date={this.state.startDateAndTimeForMachineryUse}
+              onDateChange={date => this.handleStartDateTimeChange(date)}
+              minimumDate={new Date()}
+              minuteInterval={5}
+              mode="datetime"
+              textColor="#3CB371"
+              style={styles.dateTimePicker}
+            />
+          )}
+        </View>
+        {/* ============END DATE AND TIME=================== */}
         <View style={styles.questionContainer}>
           <Text style={styles.questionTitle}>END DATE FOR MACHINERY USE</Text>
           <Text style={styles.questionText}>
             Please provide the date and time when the work is scheduled to end.
           </Text>
-          <View style={styles.dateAndTimeContainer}>
-            <Text style={styles.dateText} onPress={this.datepicker}>
-              {this.renderDateInHumanReadableFormat(this.state.endDateAndTimeForMachineryUse)}
-            </Text>
-            <Text style={styles.timeText} onPress={this.timepicker}>
-              {this.renderTimeInHumanReadableFormat(this.state.startDateAndTimeForMachineryUse)}
-            </Text>
-            {this.state.show && (
-              <DateTimePicker
-                style={styles.datePickerModal}
-                value={this.state.startDateAndTimeForMachineryUse}
-                mode={this.state.mode}
-                is24Hour={true}
-                display="default"
-                onChange={this.setDate}
-                minimumDate={Date.now()}
-              />
-            )}
-          </View>
+          <Text style={styles.dateText} onPress={this.toggleEndDateTimePicker}>
+            {/* {this.renderDateInHumanReadableFormat(this.state.startDateAndTimeForMachineryUse)} */}
+            {`${this.state.endDateAndTimeForMachineryUse.toDateString()} ${this.state.endDateAndTimeForMachineryUse
+              .toTimeString()
+              .substr(0, 5)}`}
+          </Text>
         </View>
+        <View style={styles.dateTimePickerContainer}>
+          {this.state.showEndDateTimePicker && (
+            <DatePicker
+              date={this.state.endDateAndTimeForMachineryUse}
+              onDateChange={date => this.handleEndDateTimeChange(date)}
+              minimumDate={this.state.startDateAndTimeForMachineryUse}
+              minuteInterval={5}
+              mode="datetime"
+              textColor="#3CB371"
+              style={styles.dateTimePicker}
+            />
+          )}
+        </View>
+        {/* ============END DATE AND TIME=================== */}
+        <TouchableOpacity style={styles.button} onPress={this.handleButtonPress}>
+          <Text style={styles.buttonText}>CHECK AVAILABILITY</Text>
+        </TouchableOpacity>
+        {this.state.displayErrorMessage && (
+          <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
+        )}
       </ScrollView>
     );
   }
@@ -215,40 +223,47 @@ const styles = StyleSheet.create({
     borderColor: '#3CB371',
     borderWidth: 0.2,
     textAlign: 'center',
-    fontSize: 16
+    fontSize: 16,
+    color: '#3CB371'
   },
-  picker: {
-    width: Dimensions.get('window').width - 20
-  },
-  dateAndTimeContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    alignItems: 'center'
+  machineryPicker: {
+    width: Dimensions.get('window').width - 20,
+    color: '#3CB371'
   },
   dateText: {
-    padding: 5
+    marginTop: 15,
+    textAlign: 'center',
+    color: '#3CB371'
   },
-  timeText: {
-    padding: 5
+  dateTimePickerContainer: {
+    // height: 150,
+    // width: Dimensions.get('window').width - 20
   },
-  datePickerModal: {
-    backgroundColor: '#3CB371'
+  dateTimePicker: {
+    textAlign: 'center'
   },
   button: {
     height: 50,
     width: 250,
-    margin: 10,
+    marginTop: 25,
+    marginBottom: 25,
     borderRadius: 6,
     backgroundColor: '#3CB371',
     alignItems: 'center'
   },
   buttonText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: 'normal',
-    lineHeight: 40,
+    lineHeight: 45,
     alignItems: 'center',
     textAlign: 'center'
+  },
+  errorMessage: {
+    fontSize: 14,
+    textAlign: 'center',
+    color: 'red',
+    margin: 20,
+    padding: 10
   }
 });
