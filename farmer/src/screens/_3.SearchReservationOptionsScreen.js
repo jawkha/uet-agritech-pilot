@@ -155,14 +155,29 @@ class SearchReservationOptionsScreen extends Component {
               if (data.success === 0) {
                 this.setState({
                   errorMessage:
-                    'The required machinery is not available during the provided time slot. Please try again with different dates is possible.',
+                    'The required machinery is not available during the provided time slot. Please try again with different dates if possible.',
                   displayErrorMessage: true
                 });
               } else {
                 console.log('Search Request successful. Results will be displayed on next screen.');
                 const { navigation } = this.props;
                 navigation.navigate('Search Results List', {
+                  /**
+                   * The data in userProvidedSearchInputs is currently being sent to the
+                   * next screen only to extract machineryType for displaying the correct
+                   * picture. Ideally, photos of machinery items would be sent as URLs
+                   * within the API response and this won't be required.
+                   * TO DO: Discuss with UET if they can store pictures in S3 and send
+                   * a URL based on the search query.
+                   */
                   userData: this.userData,
+                  userProvidedSearchInputs: {
+                    cnic: this.state.cnic,
+                    machineryType: this.state.machineryType,
+                    sizeOfLandInHectares: this.state.sizeOfLandInHectares,
+                    startDateAndTimeForMachineryUse: this.state.startDateAndTimeForMachineryUse,
+                    endDateAndTimeForMachineryUse: this.state.endDateAndTimeForMachineryUse
+                  },
                   searchResults: data
                 });
               }
