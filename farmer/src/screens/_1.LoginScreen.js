@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, Dimensions } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 
+import { apiEndpoints } from './../api/apiEndpoints';
+
 class LoginScreen extends Component {
   state = {
     cnic: '1330201777553',
@@ -63,7 +65,7 @@ class LoginScreen extends Component {
   handlePress = async => {
     this.setState({ displayErrorMessage: false });
 
-    const baseUrl = `http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/farmerAuthentication.php`;
+    const baseUrl = apiEndpoints.farmerAuth.url;
     const { cnic, password } = this.state;
     const constructedUrl = `${baseUrl}?cnic=${cnic}&pwd=${password}`;
 
@@ -210,45 +212,3 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   }
 });
-
-/**
- * const data = this.dataToDispatch;
-    const API = 'https://ss1mo0y797.execute-api.us-east-1.amazonaws.com/dev/data';
-
-    return NetInfo.fetch().then(NetInfoState => {
-      console.log('Connection type', NetInfoState);
-      console.log('Is connected?', NetInfoState.isConnected);
-      if (NetInfoState.isConnected === false) {
-        this.setState({
-          errorMessage:
-            'You do not seem to be connected to the internet. Please check your connection settings and try again.'
-        });
-      } else {
-        console.log('Connected to internet');
-        return fetch(API, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
-        })
-          .then(response => response.json())
-          .then(data => {
-            console.log(data);
-            if (data.message === 'File successfully uploaded to S3') {
-              const { navigation } = this.props;
-              const reservationID = navigation.getParam('reservationID');
-              navigation.navigate('Confirmation', {
-                reservationID
-              });
-            } else {
-              this.setState({
-                errorMessage:
-                  'An error occurred in storing the data in our servers. Please press the SEND DATA button to attempt sending the data again.'
-              });
-            }
-          })
-          .catch(err => console.error(err));
-      }
-    });
- */

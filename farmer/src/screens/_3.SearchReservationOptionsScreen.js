@@ -10,8 +10,10 @@ import {
   TouchableOpacity
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
+import NetInfo from '@react-native-community/netinfo';
 
 import { machineryTypeDropdownChoices } from './../data/machineryTypeDropdownChoices';
+import { apiEndpoints } from './../api/apiEndpoints';
 
 class SearchReservationOptionsScreen extends Component {
   state = {
@@ -22,7 +24,8 @@ class SearchReservationOptionsScreen extends Component {
     endDateAndTimeForMachineryUse: new Date(),
     showStartDateTimePicker: false,
     showEndDateTimePicker: false,
-    displayErrorMessage: false
+    displayErrorMessage: false,
+    errorMessage: ''
   };
 
   static navigationOptions = {
@@ -58,7 +61,25 @@ class SearchReservationOptionsScreen extends Component {
   };
 
   handleStartDateTimeChange = date => {
-    this.setState({ startDateAndTimeForMachineryUse: date });
+    /**
+     * In order to ensure that the End Date is never earlier than the Start Date,
+     * we are setting up a callback function after every change in Start Date which
+     * checks if the Start Date is ahead of the End Date and whenever that is the
+     * case, it resets the End Date to become equal to the Start Date.
+     * TO DO AFTER CONSULTATION WITH UET: There should be a minimum difference between
+     * the Start DateTime and End DateTime of a specific amount. The current setup exposes us
+     * to a scenario where the Farmer will be sending requests where the Start DateTime and
+     * End DateTime are exactly the same. This will just lead to garbage requests which will
+     * be a very poor user experience for the owener receiving these requests.
+     * The same checks can be implemented at the server level as well if UET wants to adopt
+     * that route.
+     * Again, all this will be much simpler with UNIX Timestamps.
+     */
+    this.setState({ startDateAndTimeForMachineryUse: date }, () => {
+      if (this.state.endDateAndTimeForMachineryUse < this.state.startDateAndTimeForMachineryUse) {
+        this.setState({ endDateAndTimeForMachineryUse: date });
+      }
+    });
   };
 
   handleEndDateTimeChange = date => {
@@ -66,7 +87,89 @@ class SearchReservationOptionsScreen extends Component {
   };
 
   handleButtonPress = () => {
-    console.log('Button pressed');
+    this.setState({ displayErrorMessage: false });
+
+    const {
+      cnic,
+      machineryType,
+      startDateAndTimeForMachineryUse,
+      endDateAndTimeForMachineryUse
+    } = this.state;
+
+    // This next code block is only being created because the API Endpoint is structured
+    // to receive date values as strings. If instead, it could receive UNIX timestamps,
+    // none of this would have been required.
+    const transformDateAndTime = inputDate => {
+      let transformedDate = inputDate
+        .toISOString()
+        .substr(0, 10)
+        .split('-')
+        .join('/');
+
+      let transformedTime = inputDate.toISOString().substr(11, 5);
+      let transformedDateAndTime = `${transformedDate} ${transformedTime}`;
+
+      return transformedDateAndTime;
+    };
+
+    let transformedStartDateAndTimeForMachineryUse = transformDateAndTime(
+      startDateAndTimeForMachineryUse
+    );
+    let transformedEndDateAndTimeForMachineryUse = transformDateAndTime(
+      endDateAndTimeForMachineryUse
+    );
+    // END OF TRANSFORMATION STEP TO PREPARE DATES FOR API ENDPOINTS
+
+    const baseUrl = apiEndpoints.farmerSearchReservationOptions.url;
+    const constructedUrl = `${baseUrl}?farmerNIC=${cnic}&machineType=${machineryType}&startDate=${transformedStartDateAndTimeForMachineryUse}&endDate=${transformedEndDateAndTimeForMachineryUse}`;
+
+    const allRequiredInputsProvided = () => {
+      /**
+       * We can do input validation here. Currently, all the required except
+       * for sizeOfLandInHectares have a default value in the component's state.
+       * Since the required payload for this API endpoint does not require
+       * sizeOfLandInHectares as a query parameter and all the others have default
+       * values, we are simply returning true when this function is run. However, if
+       * the requirements change in the future, the validation parameters can be
+       * defined and implemented here.
+       */
+      return true;
+    };
+
+    if (allRequiredInputsProvided() === true) {
+      return NetInfo.fetch().then(NetInfoState => {
+        console.log('Connection type', NetInfoState);
+        console.log('Is connected?', NetInfoState.isConnected);
+        if (NetInfoState.isConnected === false) {
+          this.setState({
+            errorMessage:
+              'You do not seem to be connected to the internet. Please check your connection settings and try again.',
+            displayErrorMessage: true
+          });
+        } else {
+          console.log('Connected to internet');
+          return fetch(constructedUrl)
+            .then(response => response.json())
+            .then(data => {
+              console.log({ data });
+              if (data.success === 0) {
+                this.setState({
+                  errorMessage:
+                    'The required machinery is not available during the provided time slot. Please try again with different dates is possible.',
+                  displayErrorMessage: true
+                });
+              } else {
+                console.log('Search Request successful. Results will be displayed on next screen.');
+                const { navigation } = this.props;
+                navigation.navigate('Search Results List', {
+                  userData: this.userData,
+                  searchResults: data
+                });
+              }
+            });
+        }
+      });
+    }
   };
 
   render() {
