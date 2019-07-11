@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Dimensions, View, Text, Image } from 'react-native';
+import { StyleSheet, Dimensions, TouchableOpacity, View, Text, Image } from 'react-native';
 
 import cultivatorPhoto from './../assets/cultivator.jpeg';
 import levelerPhoto from './../assets/leveler.jpg';
@@ -32,11 +32,10 @@ class SearchResultsListItem extends Component {
 
   render() {
     return (
-      /**
-       * TO DO: Make the whole item pressable so the user can go to ItemDetail screen
-       * by pressing on it.
-       */
-      <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.container}
+        onPress={() => this.props.handleItemPress(this.props.itemData)}
+      >
         <View>
           <Image source={this.imageSource} style={styles.machineryImage} />
         </View>
@@ -44,7 +43,7 @@ class SearchResultsListItem extends Component {
           <Text style={styles.machineryInfo}>{`${this.props.itemData.make} ${
             this.props.itemData.model
           }`}</Text>
-          <Text style={styles.ownerAddress}>Chak No.3, Mandi Bahauddin</Text>
+          <Text style={styles.ownerAddress}>{this.props.itemData.address}</Text>
           <View style={styles.ownerNameAndDistance}>
             <Text style={styles.ownerName}>{`${this.props.itemData.name} ${
               this.props.itemData.fname
@@ -52,7 +51,7 @@ class SearchResultsListItem extends Component {
             <Text style={styles.ownerDistance}>{`${this.props.itemData.dist}KM`}</Text>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 }
@@ -70,8 +69,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 0,
-    height: 120,
-    width: 120
+    height: 119,
+    width: 119
   },
   itemInfo: {
     height: 120,

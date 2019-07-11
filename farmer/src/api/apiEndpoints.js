@@ -43,6 +43,9 @@ export const apiEndpoints = {
           id: '2',
           name: 'Mustafa',
           fname: 'Rahman',
+          lat: '33.96751',
+          lng: '71.4444512',
+          address: 'hno1,sector1,abc,def',
           mid: '5',
           reg_no: 'reg456',
           make: 'FIAT',
@@ -56,6 +59,9 @@ export const apiEndpoints = {
           id: '7',
           name: 'Shah',
           fname: 'Jahan',
+          lat: '33.995579',
+          lng: '71.496725',
+          address: 'university town peshawar',
           mid: '7',
           reg_no: '4536',
           make: 'Ferguson',
@@ -81,5 +87,16 @@ export const apiEndpoints = {
       owner: [],
       message: 'No machine available for the specified time.'
     }
+  },
+  farmerSendReservationRequest: {
+    url:
+      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/makeReservationForFarmer.php',
+    exampleInput:
+      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/makeReservationForFarmer.php?fid=1&oid=7&mid=7&startDate=2019-06-25%2011:00:00&endDate=2019-06-25%2013:00:00&areaRequested=5',
+    successResponse: {
+      success: 1,
+      message: 'Reservation request is submitted. Please, wait for reservation process'
+    },
+    failureResponse: null
   }
 };

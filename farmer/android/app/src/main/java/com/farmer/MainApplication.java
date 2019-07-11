@@ -3,6 +3,7 @@ package com.farmer;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.airbnb.android.react.maps.MapsPackage;
 import com.henninghall.date_picker.DatePickerPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.reactnativecommunity.netinfo.NetInfoPackage;
@@ -26,6 +27,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.asList(
           new MainReactPackage(),
+          new MapsPackage(),
             new DatePickerPackage(),
           new NetInfoPackage(),
             new RNGestureHandlerPackage()

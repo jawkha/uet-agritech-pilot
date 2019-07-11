@@ -6,7 +6,8 @@ import ChoicesScreen from './src/screens/_2.ChoicesScreen';
 import SearchReservationOptionsScreen from './src/screens/_3.SearchReservationOptionsScreen';
 import SearchResultsListScreen from './src/screens/_4.SearchResultsListScreen';
 import SearchResultsMapScreen from './src/screens/_5.SearchResultsMapScreen';
-import SearchResultsItemDetailScreen from './src/screens/_6.SearchResultsItemDetailScreen';
+import RequestReservationScreen from './src/screens/_6.RequestReservationScreen';
+import ReservationRequestSentScreen from './src/screens/_7.ReservationRequestSentScreen';
 
 const AppNavigator = createStackNavigator(
   {
@@ -15,7 +16,8 @@ const AppNavigator = createStackNavigator(
     Search: SearchReservationOptionsScreen,
     'Search Results List': SearchResultsListScreen,
     'Search Results Map': SearchResultsMapScreen,
-    'Search Detail': SearchResultsItemDetailScreen
+    'Request Reservation': RequestReservationScreen,
+    'Request Sent': ReservationRequestSentScreen
   },
   {
     initialRouteName: 'Home'
