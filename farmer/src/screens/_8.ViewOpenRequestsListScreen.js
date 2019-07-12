@@ -6,7 +6,7 @@ import OpenRequestListItem from './../components/OpenRequestListItem';
 class ViewOpenRequestsListScreen extends Component {
   state = {};
 
-  static navigationOptions = ({ navigation }) => {
+  static navigationOptions = () => {
     return {
       title: 'OPEN REQUESTS',
       headerStyle: {
@@ -63,13 +63,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-    paddingVertical: 10
-  },
-  headerMapLink: {
-    paddingRight: 10,
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold'
+    backgroundColor: '#F5FCFF'
+    // paddingVertical: 5
   }
 });

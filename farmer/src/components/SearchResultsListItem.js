@@ -86,10 +86,12 @@ const styles = StyleSheet.create({
   },
   machineryInfo: {
     fontWeight: 'bold',
-    fontSize: 18
+    fontSize: 18,
+    color: 'black'
   },
   ownerAddress: {
-    fontSize: 14
+    fontSize: 14,
+    color: 'black'
   },
   ownerNameAndDistance: {
     marginTop: 16,

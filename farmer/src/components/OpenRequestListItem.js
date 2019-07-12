@@ -32,6 +32,17 @@ class OpenRequestListItem extends Component {
   }
 
   render() {
+    const {
+      status,
+      request_date: requestDate,
+      dist: distance,
+      make,
+      model,
+      owner_address: ownerAddress,
+      machineType: machineryType,
+      area_requested: areaRequested
+    } = this.props.openRequestItem;
+
     return (
       <TouchableOpacity
         style={styles.container}
@@ -40,26 +51,26 @@ class OpenRequestListItem extends Component {
         <View style={styles.coloredContainer}>
           <View style={styles.coloredRow}>
             <Text style={styles.coloredRowTextItem}>
-              {this.props.openRequestItem.status === 'notGranted' ? 'PENDING' : 'ACCEPTED'}
+              {status === 'notGranted' ? 'PENDING' : 'ACCEPTED'}
             </Text>
-            <Text style={styles.coloredRowTextItem}>
-              {moment(this.props.openRequestItem.request_date).fromNow()}
-            </Text>
+            <Text style={styles.coloredRowTextItem}>{moment(requestDate).fromNow()}</Text>
           </View>
           <Image source={this.imageSource} style={styles.machineryImage} />
           <View style={styles.coloredRow}>
             <Text style={styles.coloredRowTextItem}>{`${
               this.props.openRequestItem['owner name']
             }`}</Text>
-            <Text style={styles.coloredRowTextItem}>{`${this.props.openRequestItem.dist}KM`}</Text>
+            <Text style={styles.coloredRowTextItem}>{`${distance}KM`}</Text>
           </View>
         </View>
         <View style={styles.itemInfo}>
-          <Text style={styles.machineryInfo}>{`${this.props.openRequestItem.make} ${
-            this.props.openRequestItem.model
-          }`}</Text>
-          <Text style={styles.ownerAddress}>{this.props.openRequestItem.owner_address}</Text>
-          <Text style={styles.serviceDescription}>Service description here</Text>
+          <Text style={styles.machineryInfo}>{`${make} ${model}`}</Text>
+          <Text style={styles.ownerAddress}>{ownerAddress}</Text>
+          <Text
+            style={styles.serviceDescription}
+          >{`${machineryType} requested on ${areaRequested} hectares on ${moment(
+            requestDate
+          ).format('Do MMM')}.`}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -70,22 +81,22 @@ export default OpenRequestListItem;
 
 const styles = StyleSheet.create({
   container: {
-    height: 250,
-    width: Dimensions.get('window').width - 20,
+    height: 260,
+    width: Dimensions.get('window').width,
     borderColor: '#3CB371',
-    borderWidth: 0.5
+    borderWidth: 1
   },
   coloredContainer: {
     height: 160,
-    width: Dimensions.get('window').width - 20,
-    backgroundColor: '#3CB371',
+    width: Dimensions.get('window').width,
+    backgroundColor: 'rgba(60, 179, 113, 0.75)',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'center'
   },
   coloredRow: {
-    width: Dimensions.get('window').width - 20,
+    width: Dimensions.get('window').width,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between'
@@ -111,13 +122,16 @@ const styles = StyleSheet.create({
   },
   machineryInfo: {
     fontWeight: 'bold',
-    fontSize: 18
+    fontSize: 18,
+    color: 'black'
   },
   ownerAddress: {
-    fontSize: 14
+    fontSize: 14,
+    color: 'black'
   },
   serviceDescription: {
     marginTop: 15,
-    fontSize: 14
+    fontSize: 14,
+    color: 'black'
   }
 });
