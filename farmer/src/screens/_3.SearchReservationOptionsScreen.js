@@ -276,7 +276,7 @@ class SearchReservationOptionsScreen extends Component {
               .substr(0, 5)}`}
           </Text>
         </View>
-        <View style={styles.dateTimePickerContainer}>
+        <View>
           {this.state.showEndDateTimePicker && (
             <DatePicker
               date={this.state.endDateAndTimeForMachineryUse}
@@ -353,12 +353,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#3CB371'
   },
-  dateTimePickerContainer: {
-    // height: 150,
-    // width: Dimensions.get('window').width - 20
-  },
   dateTimePicker: {
-    textAlign: 'center'
+    alignSelf: 'center'
   },
   button: {
     height: 50,

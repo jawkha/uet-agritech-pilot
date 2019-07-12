@@ -68,10 +68,22 @@ class RequestDetailScreen extends Component {
     });
   };
 
+  handleEditButtonPress = () => {
+    const { navigation } = this.props;
+    const userData = navigation.getParam('userData');
+    const item = navigation.getParam('item');
+
+    navigation.navigate('Edit Reservation', {
+      userData,
+      item
+    });
+  };
+
   render() {
     const {
       status,
       request_date: requestDate,
+      start_date: startDate,
       dist: distance,
       make,
       model,
@@ -104,7 +116,7 @@ class RequestDetailScreen extends Component {
             <Text
               style={styles.serviceDescription}
             >{`${machineryType} requested on ${areaRequested} hectares on ${moment(
-              requestDate
+              startDate
             ).format('Do MMM')}.`}</Text>
           </View>
         </View>
@@ -112,7 +124,7 @@ class RequestDetailScreen extends Component {
           <TouchableOpacity style={styles.deleteButton} onPress={this.handleDeleteButtonPress}>
             <Text style={styles.buttonText}>DELETE</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.editButton}>
+          <TouchableOpacity style={styles.editButton} onPress={this.handleEditButtonPress}>
             <Text style={styles.buttonText}>EDIT</Text>
           </TouchableOpacity>
         </View>

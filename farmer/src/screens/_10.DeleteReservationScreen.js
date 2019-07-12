@@ -77,10 +77,11 @@ class DeleteReservationScreen extends Component {
   };
 
   handleCancelButtonPress = () => {
+    console.log('Cancel Button pressed');
     const { navigation } = this.props;
     const userData = navigation.getParam('userData');
 
-    console.log('Cancel Button pressed');
+    navigation.navigate('Open Requests List', { userData });
   };
 
   render() {

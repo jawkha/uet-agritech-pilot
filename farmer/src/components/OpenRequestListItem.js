@@ -35,6 +35,7 @@ class OpenRequestListItem extends Component {
     const {
       status,
       request_date: requestDate,
+      start_date: startDate,
       dist: distance,
       make,
       model,
@@ -68,9 +69,9 @@ class OpenRequestListItem extends Component {
           <Text style={styles.ownerAddress}>{ownerAddress}</Text>
           <Text
             style={styles.serviceDescription}
-          >{`${machineryType} requested on ${areaRequested} hectares on ${moment(
-            requestDate
-          ).format('Do MMM')}.`}</Text>
+          >{`${machineryType} requested on ${areaRequested} hectares on ${moment(startDate).format(
+            'Do MMM'
+          )}.`}</Text>
         </View>
       </TouchableOpacity>
     );
