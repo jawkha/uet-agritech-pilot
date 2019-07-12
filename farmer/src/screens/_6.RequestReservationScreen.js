@@ -137,8 +137,10 @@ class RequestReservationScreen extends Component {
                 console.log(
                   'Reservation Request successful. Confirmation message displayed on next screen.'
                 );
+
                 const { navigation } = this.props;
-                navigation.navigate('Request Sent');
+                const userData = navigation.getParam('userData');
+                navigation.navigate('Request Sent', { userData });
               }
             });
         }

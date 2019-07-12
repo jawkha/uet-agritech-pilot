@@ -98,10 +98,11 @@ class LoginScreen extends Component {
               } else {
                 console.log('Login successful');
                 const { navigation } = this.props;
-                navigation.navigate('Choices', {
-                  cnic: this.state.cnic,
+                const userData = {
+                  userCnic: this.state.cnic,
                   userProfileData: data.farmer[0]
-                });
+                };
+                navigation.navigate('Choices', { userData });
               }
             });
         }

@@ -98,5 +98,41 @@ export const apiEndpoints = {
       message: 'Reservation request is submitted. Please, wait for reservation process'
     },
     failureResponse: null
+  },
+  farmerListOpenReservations: {
+    url:
+      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/farmerReservationsByCNIC.php',
+    exampleInput:
+      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/farmerReservationsByCNIC.php?cnic=3120244533247',
+    successResponse: {
+      success: 1,
+      reservations: [
+        {
+          rid: '65',
+          farmer_id: '16',
+          mid: '18',
+          status: 'notGranted',
+          owner_id: '13',
+          start_date: '2019-06-27 13:00:00',
+          end_date: '2019-06-27 14:00:00',
+          area_requested: '24',
+          data_link: null,
+          request_date: '2019-06-27 12:36:46',
+          Name: 'Mazhar Fareed',
+          address: 'Ext Bahawalpur Farm',
+          machineType: 'Rotavator',
+          width: '1.7',
+          make: 'Massey',
+          model: 'MF385',
+          'owner name': 'Bahawalpur Farm',
+          owner_address: 'Ext Farm Bahawalpur',
+          dist: '0.00'
+        }
+      ]
+    },
+    failureResponse: {
+      success: 0,
+      message: 'Currently, no reservation requests by Service Reccipient'
+    }
   }
 };

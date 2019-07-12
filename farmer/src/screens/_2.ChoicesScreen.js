@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
+
+import { apiEndpoints } from './../api/apiEndpoints';
 
 class ChoicesScreen extends Component {
   state = {
@@ -16,13 +19,8 @@ class ChoicesScreen extends Component {
 
   get userProfile() {
     const { navigation } = this.props;
-    const userCnic = navigation.getParam('cnic');
-    const userProfileData = navigation.getParam('userProfileData');
+    const userData = navigation.getParam('userData');
 
-    const userData = {
-      userCnic,
-      userProfileData
-    };
     return userData;
   }
 
@@ -35,6 +33,7 @@ class ChoicesScreen extends Component {
   };
 
   handlePressViewOpenRequestsButton = async => {
+    console.log('View Open Requests button pressed', this.userProfile);
     /**
      * Here we will make a network request to check whether the user
      * has any open reservation requests. If they do, we will take
@@ -42,7 +41,75 @@ class ChoicesScreen extends Component {
      * the server. Otherwise, we'll display an appropriate error message
      * for the user here.
      */
-    console.log('View Open Requests button pressed');
+    this.setState({ displayErrorMessage: false });
+
+    const cnic = this.userProfile.userCnic;
+
+    const baseUrl = apiEndpoints.farmerListOpenReservations.url;
+    const constructedUrl = `${baseUrl}?cnic=${cnic}`;
+
+    const allRequiredInputsProvided = () => {
+      /**
+       * We can do validation of query parameters here.
+       */
+      if (cnic && cnic.length === 13) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+
+    if (allRequiredInputsProvided() === true) {
+      return NetInfo.fetch().then(NetInfoState => {
+        console.log('Connection type', NetInfoState);
+        console.log('Is connected?', NetInfoState.isConnected);
+        if (NetInfoState.isConnected === false) {
+          this.setState({
+            errorMessage:
+              'You do not seem to be connected to the internet. Please check your connection settings and try again.',
+            displayErrorMessage: true
+          });
+        } else {
+          console.log('Connected to internet');
+          return fetch(constructedUrl)
+            .then(response => response.json())
+            .then(data => {
+              console.log({ data });
+              if (data.success === 0) {
+                /**
+                 * If UET decides to correct the spelling mistakes in this message, this custom
+                 * error message will never be displayed to the user.
+                 * TO DO: Before creating the release APK, check with UET if they have changed or
+                 * want to change this error message.
+                 */
+                if (data.message === 'Currently, no reservation requests by Service Reccipient') {
+                  this.setState({
+                    errorMessage:
+                      'There are currently no open reservation requests recorded for this user. Please make a reservation request first.',
+                    displayErrorMessage: true
+                  });
+                } else {
+                  this.setState({
+                    errorMessage: 'An unknown error occurred. We are sorry. Please try again.',
+                    displayErrorMessage: true
+                  });
+                }
+              } else {
+                console.log(
+                  'Reservation requests for the user successfully fetched. They will be displayed on the next screen.'
+                );
+
+                const { navigation } = this.props;
+                const userData = navigation.getParam('userData');
+                navigation.navigate('Open Requests List', {
+                  userData,
+                  openReservationRequestsList: data.reservations
+                });
+              }
+            });
+        }
+      });
+    }
   };
 
   handlePressViewHistoryButton = async => {

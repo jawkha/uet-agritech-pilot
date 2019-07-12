@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Dimensions, ScrollView, Button, Text } from 'react-native';
+import { StyleSheet, ScrollView, Text } from 'react-native';
 
 import SearchResultsListItem from './../components/SearchResultsListItem';
 

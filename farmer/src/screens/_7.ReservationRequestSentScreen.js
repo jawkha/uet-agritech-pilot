@@ -12,7 +12,8 @@ class ReservationRequestSentScreen extends Component {
 
   handlePressOkButton = () => {
     const { navigation } = this.props;
-    navigation.navigate('Choices');
+    const userData = navigation.getParam('userData');
+    navigation.navigate('Choices', { userData });
   };
 
   render() {
