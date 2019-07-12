@@ -165,15 +165,13 @@ const styles = StyleSheet.create({
     marginBottom: 25,
     borderRadius: 6,
     backgroundColor: '#3CB371',
+    justifyContent: 'center',
     alignItems: 'center'
   },
   buttonText: {
     color: 'white',
     fontSize: 14,
-    fontWeight: 'normal',
-    lineHeight: 45,
-    alignItems: 'center',
-    textAlign: 'center'
+    fontWeight: 'normal'
   },
   errorMessage: {
     fontSize: 14,

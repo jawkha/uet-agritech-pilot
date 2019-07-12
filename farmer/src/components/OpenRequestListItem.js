@@ -45,7 +45,7 @@ class OpenRequestListItem extends Component {
 
     return (
       <TouchableOpacity
-        style={styles.container}
+        style={styles.itemContainer}
         onPress={() => this.props.handleItemPress(this.props.openRequestItem)}
       >
         <View style={styles.coloredContainer}>
@@ -80,7 +80,7 @@ class OpenRequestListItem extends Component {
 export default OpenRequestListItem;
 
 const styles = StyleSheet.create({
-  container: {
+  itemContainer: {
     height: 260,
     width: Dimensions.get('window').width,
     borderColor: '#3CB371',

@@ -217,10 +217,12 @@ const styles = StyleSheet.create({
   },
   machineryInfo: {
     fontWeight: 'bold',
-    fontSize: 18
+    fontSize: 18,
+    color: 'black'
   },
   ownerAddress: {
-    fontSize: 14
+    fontSize: 14,
+    color: 'black'
   },
   ownerNameAndDistance: {
     marginTop: 16,
@@ -259,15 +261,13 @@ const styles = StyleSheet.create({
     marginBottom: 25,
     borderRadius: 6,
     backgroundColor: '#3CB371',
+    justifyContent: 'center',
     alignItems: 'center'
   },
   buttonText: {
     color: 'white',
     fontSize: 14,
-    fontWeight: 'normal',
-    lineHeight: 45,
-    alignItems: 'center',
-    textAlign: 'center'
+    fontWeight: 'normal'
   },
   errorMessage: {
     fontSize: 14,

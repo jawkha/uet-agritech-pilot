@@ -202,14 +202,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 6,
     backgroundColor: '#3CB371',
+    justifyContent: 'center',
     alignItems: 'center'
   },
   buttonText: {
     color: 'white',
     fontSize: 18,
-    fontWeight: 'normal',
-    lineHeight: 45,
-    alignItems: 'center',
-    textAlign: 'center'
+    fontWeight: 'normal'
   }
 });
