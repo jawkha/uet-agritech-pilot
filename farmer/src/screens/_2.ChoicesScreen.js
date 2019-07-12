@@ -113,6 +113,7 @@ class ChoicesScreen extends Component {
   };
 
   handlePressViewHistoryButton = async => {
+    console.log('View History button pressed');
     /**
      * Here we will make a network request to check whether the user
      * has any items in the reservation history section. If they do,
@@ -120,7 +121,62 @@ class ChoicesScreen extends Component {
      * returned from the server. Otherwise, we'll display an appropriate
      * error message for the user here.
      */
-    console.log('View History button pressed');
+    this.setState({ displayErrorMessage: false });
+
+    const cnic = this.userProfile.userCnic;
+
+    const baseUrl = apiEndpoints.farmerCompletedReservationsHistory.url;
+    const constructedUrl = `${baseUrl}?cnic=${cnic}`;
+
+    const allRequiredInputsProvided = () => {
+      /**
+       * We can do validation of query parameters here.
+       */
+      if (cnic && cnic.length === 13) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+
+    if (allRequiredInputsProvided() === true) {
+      return NetInfo.fetch().then(NetInfoState => {
+        console.log('Connection type', NetInfoState);
+        console.log('Is connected?', NetInfoState.isConnected);
+        if (NetInfoState.isConnected === false) {
+          this.setState({
+            errorMessage:
+              'You do not seem to be connected to the internet. Please check your connection settings and try again.',
+            displayErrorMessage: true
+          });
+        } else {
+          console.log('Connected to internet');
+          return fetch(constructedUrl)
+            .then(response => response.json())
+            .then(data => {
+              console.log({ data });
+              if (data.success === 0) {
+                this.setState({
+                  errorMessage:
+                    'There are currently no completed reservations recorded for this user. If you think this is a mistake, please contact customer support.',
+                  displayErrorMessage: true
+                });
+              } else {
+                console.log(
+                  'Completed reservations list for the user successfully fetched. They will be displayed on the next screen.'
+                );
+
+                const { navigation } = this.props;
+                const userData = navigation.getParam('userData');
+                navigation.navigate('Reservation History', {
+                  userData,
+                  reservationHistory: data.reservations
+                });
+              }
+            });
+        }
+      });
+    }
   };
 
   render() {

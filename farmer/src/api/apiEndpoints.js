@@ -148,5 +148,80 @@ export const apiEndpoints = {
       success: 0,
       message: 'Reservation can not be found/deleted.'
     }
+  },
+  farmerCompletedReservationsHistory: {
+    url:
+      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/farmerCompletedReservationsByCNIC.php',
+    exampleInput:
+      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/farmerCompletedReservationsByCNIC.php?cnic=1330201777553',
+    successResponse: {
+      success: 1,
+      reservations: [
+        {
+          rid: '58',
+          billAmount: 0,
+          farmer_id: '1',
+          mid: '7',
+          status: 'Completed',
+          owner_id: '2',
+          start_date: '2019-06-02 17:00:00',
+          end_date: '2019-06-02 18:00:00',
+          area_requested: '12',
+          data_link: 'https://agritechstorage.s3.amazonaws.com/Sandbox/fullApptesting/68.csv',
+          request_date: '2019-06-02 17:00:00',
+          actual_area: '5169.844159003002',
+          authenticity: 'False',
+          FarmerName: 'Ali',
+          FarmerLastName: 'Ahmad',
+          machineType: 'Rotavator',
+          OwnerName: 'Mustafa',
+          OwnerLastName: 'Rahman'
+        },
+        {
+          rid: '59',
+          billAmount: 0,
+          farmer_id: '1',
+          mid: '9',
+          status: 'Completed',
+          owner_id: '2',
+          start_date: '2019-06-02 17:00:00',
+          end_date: '2019-06-02 18:00:00',
+          area_requested: '14',
+          data_link: 'https://agritechstorage.s3.amazonaws.com/Sandbox/fullApptesting/59.csv',
+          request_date: '2019-06-02 17:00:00',
+          actual_area: '345.5784719050249',
+          authenticity: 'False',
+          FarmerName: 'Ali',
+          FarmerLastName: 'Ahmad',
+          machineType: 'Cultivator',
+          OwnerName: 'Mustafa',
+          OwnerLastName: 'Rahman'
+        },
+        {
+          rid: '60',
+          billAmount: 0,
+          farmer_id: '1',
+          mid: '15',
+          status: 'Completed',
+          owner_id: '2',
+          start_date: '2019-06-02 17:00:00',
+          end_date: '2019-06-02 18:00:00',
+          area_requested: '1',
+          data_link: 'https://agritechstorage.s3.amazonaws.com/Sandbox/fullApptesting/60.csv',
+          request_date: '2019-06-02 17:00:00',
+          actual_area: '267173.29941861215',
+          authenticity: 'False',
+          FarmerName: 'Ali',
+          FarmerLastName: 'Ahmad',
+          machineType: 'Cultivator',
+          OwnerName: 'Mustafa',
+          OwnerLastName: 'Rahman'
+        }
+      ]
+    },
+    failureResponse: {
+      success: 0,
+      message: 'No reservation found.'
+    }
   }
 };
