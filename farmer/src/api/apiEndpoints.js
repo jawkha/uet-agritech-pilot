@@ -134,5 +134,19 @@ export const apiEndpoints = {
       success: 0,
       message: 'Currently, no reservation requests by Service Reccipient'
     }
+  },
+  farmerDeleteReservationRequest: {
+    url:
+      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/deleteFarmerReservationRequestByRID.php',
+    exampleInput:
+      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/deleteFarmerReservationRequestByRID.php?rid=86',
+    successResponse: {
+      success: 1,
+      message: 'Reservation request deleted.'
+    },
+    failureResponse: {
+      success: 0,
+      message: 'Reservation can not be found/deleted.'
+    }
   }
 };

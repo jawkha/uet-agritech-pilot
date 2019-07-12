@@ -57,6 +57,17 @@ class RequestDetailScreen extends Component {
     return this.selectImageSource(this.openRequestItem.machineType);
   }
 
+  handleDeleteButtonPress = () => {
+    const { navigation } = this.props;
+    const userData = navigation.getParam('userData');
+    const item = navigation.getParam('item');
+
+    navigation.navigate('Delete Reservation', {
+      userData,
+      item
+    });
+  };
+
   render() {
     const {
       status,
@@ -98,7 +109,7 @@ class RequestDetailScreen extends Component {
           </View>
         </View>
         <View style={styles.buttonsContainer}>
-          <TouchableOpacity style={styles.deleteButton}>
+          <TouchableOpacity style={styles.deleteButton} onPress={this.handleDeleteButtonPress}>
             <Text style={styles.buttonText}>DELETE</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.editButton}>
@@ -175,7 +186,8 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-evenly'
+    justifyContent: 'center',
+    marginTop: 25
   },
   deleteButton: {
     borderRadius: 6,
@@ -183,7 +195,8 @@ const styles = StyleSheet.create({
     width: 120,
     height: 50,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginRight: 10
   },
   editButton: {
     borderRadius: 6,
@@ -191,7 +204,8 @@ const styles = StyleSheet.create({
     width: 120,
     height: 50,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginLeft: 10
   },
   buttonText: {
     fontSize: 18,

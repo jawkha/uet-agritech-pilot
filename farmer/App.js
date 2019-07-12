@@ -10,6 +10,7 @@ import RequestReservationScreen from './src/screens/_6.RequestReservationScreen'
 import ReservationRequestSentScreen from './src/screens/_7.ReservationRequestSentScreen';
 import ViewOpenRequestsListScreen from './src/screens/_8.ViewOpenRequestsListScreen';
 import RequestDetailScreen from './src/screens/_9.RequestDetailScreen';
+import DeleteReservationScreen from './src/screens/_10.DeleteReservationScreen';
 
 const AppNavigator = createStackNavigator(
   {
@@ -21,7 +22,8 @@ const AppNavigator = createStackNavigator(
     'Request Reservation': RequestReservationScreen,
     'Request Sent': ReservationRequestSentScreen,
     'Open Requests List': ViewOpenRequestsListScreen,
-    'Request Detail': RequestDetailScreen
+    'Request Detail': RequestDetailScreen,
+    'Delete Reservation': DeleteReservationScreen
   },
   {
     initialRouteName: 'Home'
