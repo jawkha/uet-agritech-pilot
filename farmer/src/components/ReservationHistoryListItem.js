@@ -8,10 +8,13 @@ class ReservationHistoryListItem extends Component {
   render() {
     const {
       start_date: startDate,
-      billAmount,
-      OwnerName,
-      OwnerLastName,
+      billAmount: billedAmount,
+      OwnerName: ownerFirstName,
+      OwnerLastName: ownerLastName,
+      address: ownerAddress,
       machineType: machineryType,
+      make: machineryMake,
+      model: machineryModel,
       area_requested: areaRequested
     } = this.props.historyItem;
 
@@ -19,15 +22,15 @@ class ReservationHistoryListItem extends Component {
       <View style={styles.itemContainer}>
         <View style={styles.coloredRow}>
           <Text style={styles.coloredRowTextItem}>{moment(startDate).format('DD MMM, YYYY')}</Text>
-          <Text style={styles.coloredRowTextItem}>PKR {billAmount}</Text>
+          <Text style={styles.coloredRowTextItem}>PKR {billedAmount}</Text>
         </View>
 
         <View style={styles.itemContents}>
-          <Text style={styles.ownerName}>{`${OwnerName} ${OwnerLastName}`}</Text>
-          <Text style={styles.ownerAddress}>Chak No.3, Mandi Bahauddin</Text>
+          <Text style={styles.ownerName}>{`${ownerFirstName} ${ownerLastName}`}</Text>
+          <Text style={styles.ownerAddress}>{ownerAddress}</Text>
           <Text
             style={styles.serviceDescription}
-          >{`${machineryType} service on ${areaRequested} hectares using MF-9800.`}</Text>
+          >{`${machineryType} service on ${areaRequested} hectares using ${machineryMake} ${machineryModel}.`}</Text>
         </View>
       </View>
     );
