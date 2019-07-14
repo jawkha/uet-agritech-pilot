@@ -6,8 +6,8 @@ import { apiEndpoints } from './../api/apiEndpoints';
 
 class LoginScreen extends Component {
   state = {
-    cnic: '1330201777553',
-    password: '12345',
+    cnic: '',
+    password: '',
     errorMessage:
       'Please check your login details and try again. The credentials provided are invalid.',
     displayErrorMessage: false
