@@ -22,7 +22,9 @@ class ReservationHistoryListItem extends Component {
       <View style={styles.itemContainer}>
         <View style={styles.coloredRow}>
           <Text style={styles.coloredRowTextItem}>{moment(startDate).format('DD MMM, YYYY')}</Text>
-          <Text style={styles.coloredRowTextItem}>PKR {billedAmount}</Text>
+          <Text style={styles.coloredRowTextItem}>
+            PKR {billedAmount.toFixed(0).toLocaleString()}
+          </Text>
         </View>
 
         <View style={styles.itemContents}>
