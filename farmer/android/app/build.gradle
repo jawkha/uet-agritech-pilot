@@ -78,6 +78,19 @@ project.ext.react = [
 
 apply from: "../../node_modules/react-native/react.gradle"
 
+
+def getPassword(String currentUser, String keyChain) {
+   def stdout = new ByteArrayOutputStream()
+   def stderr = new ByteArrayOutputStream()
+   exec {
+       commandLine 'security', '-q', 'find-generic-password', '-a', currentUser, '-s', keyChain, '-w'
+       standardOutput = stdout
+       errorOutput = stderr
+       ignoreExitValue true
+   }
+   //noinspection GroovyAssignabilityCheck
+      stdout.toString().trim()
+}
 /**
  * Set this to true to create two separate APKs instead of one:
  *   - An APK that only works on ARM devices
@@ -92,6 +105,10 @@ def enableSeparateBuildPerCPUArchitecture = false
  * Run Proguard to shrink the Java bytecode in release builds.
  */
 def enableProguardInReleaseBuilds = false
+
+def uetFarmerAndroidUploadStorePassword = getPassword('Jawad Khawaja', 'uet-farmer-android-upload-store-password')
+
+def uetFarmerAndroidUploadKeyPassword = getPassword('Jawad Khawaja', 'uet-farmer-android-upload-key-password')
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -116,10 +133,21 @@ android {
             include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
         }
     }
+    signingConfigs {
+        release {
+            if (project.hasProperty('FARMER_UPLOAD_STORE_FILE')) {
+                storeFile file(FARMER_UPLOAD_STORE_FILE)
+                storePassword uetFarmerAndroidUploadStorePassword
+                keyAlias FARMER_UPLOAD_KEY_ALIAS
+                keyPassword uetFarmerAndroidUploadKeyPassword
+            }
+        }
+    }
     buildTypes {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release
