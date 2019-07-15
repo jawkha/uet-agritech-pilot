@@ -149,6 +149,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject
   },
   marker: {
-    width: Dimensions.get('window').width * 0.05
+    width: Dimensions.get('window').width * 0.05,
+    height: Dimensions.get('window').height * 0.03
   }
 });
