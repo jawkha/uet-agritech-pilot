@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 
 import { apiEndpoints } from './../api/apiEndpoints';
@@ -64,11 +64,20 @@ class ChoicesScreen extends Component {
         console.log('Connection type', NetInfoState);
         console.log('Is connected?', NetInfoState.isConnected);
         if (NetInfoState.isConnected === false) {
-          this.setState({
-            errorMessage:
-              'You do not seem to be connected to the internet. Please check your connection settings and try again.',
-            displayErrorMessage: true
-          });
+          this.setState(
+            {
+              errorMessage:
+                'You do not seem to be connected to the internet. Please check your connection settings and try again.',
+              displayErrorMessage: true
+            },
+            () =>
+              Alert.alert('Error', this.state.errorMessage, [
+                {
+                  text: 'OK',
+                  onPress: () => console.log('OK Button pressed')
+                }
+              ])
+          );
         } else {
           console.log('Connected to internet');
           return fetch(constructedUrl)
@@ -83,16 +92,34 @@ class ChoicesScreen extends Component {
                  * want to change this error message.
                  */
                 if (data.message === 'Currently, no reservation requests by Service Reccipient') {
-                  this.setState({
-                    errorMessage:
-                      'There are currently no open reservation requests recorded for this user. Please make a reservation request first.',
-                    displayErrorMessage: true
-                  });
+                  this.setState(
+                    {
+                      errorMessage:
+                        'There are currently no open reservation requests recorded for this user. Please make a reservation request first.',
+                      displayErrorMessage: true
+                    },
+                    () =>
+                      Alert.alert('Error', this.state.errorMessage, [
+                        {
+                          text: 'OK',
+                          onPress: () => console.log('OK Button pressed')
+                        }
+                      ])
+                  );
                 } else {
-                  this.setState({
-                    errorMessage: 'An unknown error occurred. We are sorry. Please try again.',
-                    displayErrorMessage: true
-                  });
+                  this.setState(
+                    {
+                      errorMessage: 'An unknown error occurred. We are sorry. Please try again.',
+                      displayErrorMessage: true
+                    },
+                    () =>
+                      Alert.alert('Error', this.state.errorMessage, [
+                        {
+                          text: 'OK',
+                          onPress: () => console.log('OK Button pressed')
+                        }
+                      ])
+                  );
                 }
               } else {
                 console.log(
@@ -144,11 +171,20 @@ class ChoicesScreen extends Component {
         console.log('Connection type', NetInfoState);
         console.log('Is connected?', NetInfoState.isConnected);
         if (NetInfoState.isConnected === false) {
-          this.setState({
-            errorMessage:
-              'You do not seem to be connected to the internet. Please check your connection settings and try again.',
-            displayErrorMessage: true
-          });
+          this.setState(
+            {
+              errorMessage:
+                'You do not seem to be connected to the internet. Please check your connection settings and try again.',
+              displayErrorMessage: true
+            },
+            () =>
+              Alert.alert('Error', this.state.errorMessage, [
+                {
+                  text: 'OK',
+                  onPress: () => console.log('OK Button pressed')
+                }
+              ])
+          );
         } else {
           console.log('Connected to internet');
           return fetch(constructedUrl)
@@ -156,11 +192,20 @@ class ChoicesScreen extends Component {
             .then(data => {
               console.log({ data });
               if (data.success === 0) {
-                this.setState({
-                  errorMessage:
-                    'There are currently no completed reservations recorded for this user. If you think this is a mistake, please contact customer support.',
-                  displayErrorMessage: true
-                });
+                this.setState(
+                  {
+                    errorMessage:
+                      'There are currently no completed reservations recorded for this user. If you think this is a mistake, please contact customer support.',
+                    displayErrorMessage: true
+                  },
+                  () =>
+                    Alert.alert('Error', this.state.errorMessage, [
+                      {
+                        text: 'OK',
+                        onPress: () => console.log('OK Button pressed')
+                      }
+                    ])
+                );
               } else {
                 console.log(
                   'Completed reservations list for the user successfully fetched. They will be displayed on the next screen.'
@@ -193,9 +238,9 @@ class ChoicesScreen extends Component {
             <Text style={styles.buttonText}>VIEW RESERVATION HISTORY</Text>
           </TouchableOpacity>
         </View>
-        {this.state.displayErrorMessage && (
+        {/* {this.state.displayErrorMessage && (
           <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
-        )}
+        )} */}
       </View>
     );
   }

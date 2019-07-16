@@ -7,7 +7,8 @@ import {
   Text,
   TextInput,
   Picker,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import NetInfo from '@react-native-community/netinfo';
@@ -24,8 +25,8 @@ class SearchReservationOptionsScreen extends Component {
     endDateAndTimeForMachineryUse: new Date(),
     showStartDateTimePicker: false,
     showEndDateTimePicker: false,
-    displayErrorMessage: false,
     errorMessage: ''
+    // displayErrorMessage: false,
   };
 
   static navigationOptions = {
@@ -127,12 +128,27 @@ class SearchReservationOptionsScreen extends Component {
       /**
        * We can do input validation here. Currently, all the required except
        * for sizeOfLandInHectares have a default value in the component's state.
-       * Since the required payload for this API endpoint does not require
-       * sizeOfLandInHectares as a query parameter and all the others have default
-       * values, we are simply returning true when this function is run. However, if
+       * We are placing a check here to ensure the user also provides the size
+       * of land before they can make a request.
        * the requirements change in the future, the validation parameters can be
        * defined and implemented here.
        */
+      if (this.state.sizeOfLandInHectares === '') {
+        this.setState(
+          {
+            errorMessage: 'Please provide the size of the land before making a request.',
+            displayErrorMessage: true
+          },
+          () =>
+            Alert.alert('Error', this.state.errorMessage, [
+              {
+                text: 'OK',
+                onPress: () => console.log('OK Button pressed')
+              }
+            ])
+        );
+        return false;
+      }
       return true;
     };
 
@@ -141,11 +157,20 @@ class SearchReservationOptionsScreen extends Component {
         console.log('Connection type', NetInfoState);
         console.log('Is connected?', NetInfoState.isConnected);
         if (NetInfoState.isConnected === false) {
-          this.setState({
-            errorMessage:
-              'You do not seem to be connected to the internet. Please check your connection settings and try again.',
-            displayErrorMessage: true
-          });
+          this.setState(
+            {
+              errorMessage:
+                'You do not seem to be connected to the internet. Please check your connection settings and try again.',
+              displayErrorMessage: true
+            },
+            () =>
+              Alert.alert('Error', this.state.errorMessage, [
+                {
+                  text: 'OK',
+                  onPress: () => console.log('OK Button pressed')
+                }
+              ])
+          );
         } else {
           console.log('Connected to internet');
           return fetch(constructedUrl)
@@ -153,11 +178,20 @@ class SearchReservationOptionsScreen extends Component {
             .then(data => {
               console.log({ data });
               if (data.success === 0) {
-                this.setState({
-                  errorMessage:
-                    'The required machinery is not available during the provided time slot. Please try again with different dates if possible.',
-                  displayErrorMessage: true
-                });
+                this.setState(
+                  {
+                    errorMessage:
+                      'The required machinery is not available during the provided time slot. Please try again with different dates if possible.',
+                    displayErrorMessage: true
+                  },
+                  () =>
+                    Alert.alert('Error', this.state.errorMessage, [
+                      {
+                        text: 'OK',
+                        onPress: () => console.log('OK Button pressed')
+                      }
+                    ])
+                );
               } else {
                 console.log('Search Request successful. Results will be displayed on next screen.');
                 const { navigation } = this.props;
@@ -293,9 +327,9 @@ class SearchReservationOptionsScreen extends Component {
         <TouchableOpacity style={styles.button} onPress={this.handleButtonPress}>
           <Text style={styles.buttonText}>CHECK AVAILABILITY</Text>
         </TouchableOpacity>
-        {this.state.displayErrorMessage && (
+        {/* {this.state.displayErrorMessage && (
           <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
-        )}
+        )} */}
       </ScrollView>
     );
   }
@@ -350,6 +384,7 @@ const styles = StyleSheet.create({
   },
   dateText: {
     marginTop: 15,
+    padding: 10,
     textAlign: 'center',
     color: '#3CB371'
   },

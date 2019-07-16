@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Dimensions, View, Text, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Dimensions, View, Text, Image, TouchableOpacity, Alert } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 
 import { apiEndpoints } from './../api/apiEndpoints';
@@ -116,11 +116,20 @@ class RequestReservationScreen extends Component {
         console.log('Connection type', NetInfoState);
         console.log('Is connected?', NetInfoState.isConnected);
         if (NetInfoState.isConnected === false) {
-          this.setState({
-            errorMessage:
-              'You do not seem to be connected to the internet. Please check your connection settings and try again.',
-            displayErrorMessage: true
-          });
+          this.setState(
+            {
+              errorMessage:
+                'You do not seem to be connected to the internet. Please check your connection settings and try again.',
+              displayErrorMessage: true
+            },
+            () =>
+              Alert.alert('Error', this.state.errorMessage, [
+                {
+                  text: 'OK',
+                  onPress: () => console.log('OK Button pressed')
+                }
+              ])
+          );
         } else {
           console.log('Connected to internet');
           return fetch(constructedUrl)
@@ -128,11 +137,20 @@ class RequestReservationScreen extends Component {
             .then(data => {
               console.log({ data });
               if (data.success === 0) {
-                this.setState({
-                  errorMessage:
-                    'An error occurred due to which your reservation request could not be sent. Please try again.',
-                  displayErrorMessage: true
-                });
+                this.setState(
+                  {
+                    errorMessage:
+                      'An error occurred due to which your reservation request could not be sent. Please try again.',
+                    displayErrorMessage: true
+                  },
+                  () =>
+                    Alert.alert('Error', this.state.errorMessage, [
+                      {
+                        text: 'OK',
+                        onPress: () => console.log('OK Button pressed')
+                      }
+                    ])
+                );
               } else {
                 console.log(
                   'Reservation Request successful. Confirmation message displayed on next screen.'
@@ -171,9 +189,9 @@ class RequestReservationScreen extends Component {
         <TouchableOpacity style={styles.button} onPress={this.handleButtonPress}>
           <Text style={styles.buttonText}>REQUEST RESERVATION</Text>
         </TouchableOpacity>
-        {this.state.displayErrorMessage && (
+        {/* {this.state.displayErrorMessage && (
           <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
-        )}
+        )} */}
       </View>
     );
   }

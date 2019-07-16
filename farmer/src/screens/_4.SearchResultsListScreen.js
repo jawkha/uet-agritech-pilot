@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10
   },
   headerMapLink: {
-    paddingRight: 10,
+    padding: 10,
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold'

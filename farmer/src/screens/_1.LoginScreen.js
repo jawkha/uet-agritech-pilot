@@ -1,13 +1,21 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, Dimensions } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Dimensions,
+  Alert
+} from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 
 import { apiEndpoints } from './../api/apiEndpoints';
 
 class LoginScreen extends Component {
   state = {
-    cnic: '',
-    password: '',
+    cnic: '1330201777553',
+    password: '12345',
     errorMessage:
       'Please check your login details and try again. The credentials provided are invalid.',
     displayErrorMessage: false
@@ -57,7 +65,14 @@ class LoginScreen extends Component {
       );
       return true;
     } else {
-      this.setState({ displayErrorMessage: true });
+      this.setState({ displayErrorMessage: true }, () =>
+        Alert.alert('Error', this.state.errorMessage, [
+          {
+            text: 'OK',
+            onPress: () => console.log('OK Button pressed')
+          }
+        ])
+      );
       return false;
     }
   };
@@ -78,11 +93,20 @@ class LoginScreen extends Component {
         console.log('Connection type', NetInfoState);
         console.log('Is connected?', NetInfoState.isConnected);
         if (NetInfoState.isConnected === false) {
-          this.setState({
-            errorMessage:
-              'You do not seem to be connected to the internet. Please check your connection settings and try again.',
-            displayErrorMessage: true
-          });
+          this.setState(
+            {
+              errorMessage:
+                'You do not seem to be connected to the internet. Please check your connection settings and try again.',
+              displayErrorMessage: true
+            },
+            () =>
+              Alert.alert('Error', this.state.errorMessage, [
+                {
+                  text: 'OK',
+                  onPress: () => console.log('OK Button pressed')
+                }
+              ])
+          );
         } else {
           console.log('Connected to internet');
           return fetch(constructedUrl)
@@ -90,11 +114,20 @@ class LoginScreen extends Component {
             .then(data => {
               console.log({ data });
               if (data.success === 0) {
-                this.setState({
-                  errorMessage:
-                    'The login credentials are incorrect. Please try again using the correct CNIC and password combination.',
-                  displayErrorMessage: true
-                });
+                this.setState(
+                  {
+                    errorMessage:
+                      'The login credentials are incorrect. Please try again using the correct CNIC and password combination.',
+                    displayErrorMessage: true
+                  },
+                  () =>
+                    Alert.alert('Error', this.state.errorMessage, [
+                      {
+                        text: 'OK',
+                        onPress: () => console.log('OK Button pressed')
+                      }
+                    ])
+                );
               } else {
                 console.log('Login successful');
                 const { navigation } = this.props;
@@ -138,9 +171,9 @@ class LoginScreen extends Component {
         <TouchableOpacity style={styles.button} onPress={this.handlePress}>
           <Text style={styles.buttonText}>LOGIN</Text>
         </TouchableOpacity>
-        {this.state.displayErrorMessage && (
+        {/* {this.state.displayErrorMessage && (
           <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
-        )}
+        )} */}
       </View>
     );
   }

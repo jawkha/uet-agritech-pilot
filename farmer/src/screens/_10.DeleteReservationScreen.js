@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 
 import { apiEndpoints } from './../api/apiEndpoints';
@@ -44,11 +44,20 @@ class DeleteReservationScreen extends Component {
         console.log('Connection type', NetInfoState);
         console.log('Is connected?', NetInfoState.isConnected);
         if (NetInfoState.isConnected === false) {
-          this.setState({
-            errorMessage:
-              'You do not seem to be connected to the internet. Please check your connection settings and try again.',
-            displayErrorMessage: true
-          });
+          this.setState(
+            {
+              errorMessage:
+                'You do not seem to be connected to the internet. Please check your connection settings and try again.',
+              displayErrorMessage: true
+            },
+            () =>
+              Alert.alert('Error', this.state.errorMessage, [
+                {
+                  text: 'OK',
+                  onPress: () => console.log('OK Button pressed')
+                }
+              ])
+          );
         } else {
           console.log('Connected to internet');
           return fetch(constructedUrl)
@@ -56,11 +65,20 @@ class DeleteReservationScreen extends Component {
             .then(data => {
               console.log({ data });
               if (data.success === 0) {
-                this.setState({
-                  errorMessage:
-                    'An unknown error occurred. We are sorry. Please try again. If the error persists, please restart the app.',
-                  displayErrorMessage: true
-                });
+                this.setState(
+                  {
+                    errorMessage:
+                      'An unknown error occurred. We are sorry. Please try again. If the error persists, please restart the app.',
+                    displayErrorMessage: true
+                  },
+                  () =>
+                    Alert.alert('Error', this.state.errorMessage, [
+                      {
+                        text: 'OK',
+                        onPress: () => console.log('OK Button pressed')
+                      }
+                    ])
+                );
               } else {
                 console.log(
                   `Reservation request with the ID ${

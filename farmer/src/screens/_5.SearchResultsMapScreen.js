@@ -133,7 +133,7 @@ export default SearchResultsMapScreen;
 
 const styles = StyleSheet.create({
   headerListLink: {
-    paddingRight: 10,
+    padding: 10,
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold'
