@@ -9,13 +9,14 @@ import {
   Alert
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import { apiEndpoints } from './../api/apiEndpoints';
 
 class LoginScreen extends Component {
   state = {
-    cnic: '1330201777553',
-    password: '12345',
+    cnic: '',
+    password: '',
     errorMessage:
       'Please check your login details and try again. The credentials provided are invalid.',
     displayErrorMessage: false
@@ -26,6 +27,41 @@ class LoginScreen extends Component {
       backgroundColor: '#3CB371'
     }
   };
+
+  getUserCnicFromStorage = async () => {
+    try {
+      const userCnic = await AsyncStorage.getItem('@cnic');
+      if (userCnic) {
+        this.setState({ cnic: userCnic }, () =>
+          console.log(`User CNIC ${this.state.cnic} fetched from async storage.`)
+        );
+      }
+    } catch (e) {
+      this.setState(
+        {
+          errorMessage: 'An error occurred in fetching CNIC value from async storage'
+        },
+        () => console.log(this.state, e)
+      );
+    }
+  };
+
+  saveUserCnicInStorage = async () => {
+    try {
+      await AsyncStorage.setItem('@cnic', this.state.cnic);
+    } catch (e) {
+      this.setState(
+        {
+          errorMessage: 'An error occurred in storing CNIC value in async storage'
+        },
+        () => console.log(this.state, e)
+      );
+    }
+  };
+
+  componentDidMount() {
+    this.getUserCnicFromStorage();
+  }
 
   handleCnicInputChange = text => {
     /**
@@ -135,7 +171,9 @@ class LoginScreen extends Component {
                   userCnic: this.state.cnic,
                   userProfileData: data.farmer[0]
                 };
-                navigation.navigate('Choices', { userData });
+                this.saveUserCnicInStorage().then(() => {
+                  navigation.navigate('Choices', { userData });
+                });
               }
             });
         }
