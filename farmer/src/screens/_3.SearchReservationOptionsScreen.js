@@ -149,6 +149,22 @@ class SearchReservationOptionsScreen extends Component {
         );
         return false;
       }
+      if (!this.state.sizeOfLandInHectares.match(/^\d{0,5}(\.\d{1,2})?$/) === true) {
+        this.setState(
+          {
+            errorMessage:
+              'The size of land provided is not a valid number. There should be at least one but not more than two decimal digits if you are using decimal values. Please correct it and try again.'
+          },
+          () =>
+            Alert.alert('Error', this.state.errorMessage, [
+              {
+                text: 'OK',
+                onPress: () => console.log('OK Button pressed')
+              }
+            ])
+        );
+        return false;
+      }
       return true;
     };
 
@@ -260,12 +276,11 @@ class SearchReservationOptionsScreen extends Component {
           <TextInput
             style={styles.textInput}
             onChangeText={text =>
-              this.setState({ sizeOfLandInHectares: text.replace(/\D/g, '') }, () =>
-                console.log(this.state)
-              )
+              this.setState({ sizeOfLandInHectares: text }, () => console.log(this.state))
             }
             value={this.state.sizeOfLandInHectares}
             placeholderTextColor="#3CB371"
+            keyboardType="decimal-pad"
             autoCapitalize="none"
             autoCorrect={false}
           />
