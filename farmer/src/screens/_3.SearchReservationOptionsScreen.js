@@ -12,9 +12,36 @@ import {
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import NetInfo from '@react-native-community/netinfo';
+import moment from 'moment';
 
 import { machineryTypeDropdownChoices } from './../data/machineryTypeDropdownChoices';
 import { apiEndpoints } from './../api/apiEndpoints';
+
+/**
+ * We are performing the following checks on this page regarding date inputs:
+ * 1. When the screen loads for the first time, the dates are displayed such that,
+ *      End Date - Start Date >= 1 hour
+ *    NOTE: One hour difference has been prescribed by UET.
+ *    This condition is ensured in the state object by setting Start Date to current
+ *    time and End Date to 1 hour ahead of current time.
+ *
+ * 2. Whenever the user makes a change to the Start Date, we perform the following checks:
+ *    SD >= Current Time (ensured by the minimumDate prop in Start Date DatePicker component)
+ *    End Date - Start Date >= 1 hour (ensured while setting state after input change)
+ *
+ * 3. Whenever the user makes a change to the End Date, we perform the following checks:
+ *    End Date - Start Date >= 1 hour (ensured while setting state after input change)
+ *
+ * 4. Whenever the user initiates a Network Request by pressing the button on the
+ * screen, we ensure that the input parameters are transformed into the correct
+ * format for the API endpoint. For the date inputs, the required format is:
+ *        `2019/07/04%2020:00`
+ * We previously wrote a function to do this transformation but we can do the same
+ * now using moment.
+ * The required method for this transformation will be as follows:
+ * moment(this.state.startDateAndTimeForMachineryUse).format('YYYY/MM/DD HH:mm')
+ * moment(this.state.endDateAndTimeForMachineryUse).format('YYYY/MM/DD HH:mm')
+ */
 
 class SearchReservationOptionsScreen extends Component {
   state = {
@@ -22,7 +49,7 @@ class SearchReservationOptionsScreen extends Component {
     machineryType: machineryTypeDropdownChoices[0],
     sizeOfLandInHectares: '',
     startDateAndTimeForMachineryUse: new Date(),
-    endDateAndTimeForMachineryUse: new Date(),
+    endDateAndTimeForMachineryUse: moment(new Date()).add(1, 'hour'),
     showStartDateTimePicker: false,
     showEndDateTimePicker: false,
     errorMessage: ''
@@ -45,13 +72,10 @@ class SearchReservationOptionsScreen extends Component {
   }
 
   toggleStartDateTimePicker = () => {
-    this.setState(
-      {
-        showStartDateTimePicker: !this.state.showStartDateTimePicker,
-        showEndDateTimePicker: false
-      },
-      () => console.log(this.state.startDateAndTimeForMachineryUse)
-    );
+    this.setState({
+      showStartDateTimePicker: !this.state.showStartDateTimePicker,
+      showEndDateTimePicker: false
+    });
   };
 
   toggleEndDateTimePicker = () => {
@@ -63,28 +87,37 @@ class SearchReservationOptionsScreen extends Component {
 
   handleStartDateTimeChange = date => {
     /**
-     * In order to ensure that the End Date is never earlier than the Start Date,
-     * we are setting up a callback function after every change in Start Date which
-     * checks if the Start Date is ahead of the End Date and whenever that is the
-     * case, it resets the End Date to become equal to the Start Date.
-     * TO DO AFTER CONSULTATION WITH UET: There should be a minimum difference between
-     * the Start DateTime and End DateTime of a specific amount. The current setup exposes us
-     * to a scenario where the Farmer will be sending requests where the Start DateTime and
-     * End DateTime are exactly the same. This will just lead to garbage requests which will
-     * be a very poor user experience for the owener receiving these requests.
-     * The same checks can be implemented at the server level as well if UET wants to adopt
-     * that route.
-     * Again, all this will be much simpler with UNIX Timestamps.
+     * Whenever the user makes a change to the Start Date, we perform the following checks:
+     *    SD >= Current Time (ensured by the minimumDate prop in Start Date DatePicker component)
+     *    End Date - Start Date >= 1 hour (ensured while setting state after input change)
      */
     this.setState({ startDateAndTimeForMachineryUse: date }, () => {
-      if (this.state.endDateAndTimeForMachineryUse < this.state.startDateAndTimeForMachineryUse) {
-        this.setState({ endDateAndTimeForMachineryUse: date });
+      if (
+        moment(this.state.endDateAndTimeForMachineryUse).diff(
+          moment(this.state.startDateAndTimeForMachineryUse),
+          'hours'
+        ) < 1
+      ) {
+        this.setState({ endDateAndTimeForMachineryUse: moment(date).add(1, 'hour') });
       }
     });
   };
 
   handleEndDateTimeChange = date => {
-    this.setState({ endDateAndTimeForMachineryUse: date });
+    /**
+     * Whenever the user makes a change to the End Date, we perform the following checks:
+     *    End Date - Start Date >= 1 hour (ensured while setting state after input change)
+     */
+    if (moment(date).diff(moment(this.state.startDateAndTimeForMachineryUse), 'hours') < 1) {
+      this.setState({
+        endDateAndTimeForMachineryUse: moment(this.state.startDateAndTimeForMachineryUse).add(
+          1,
+          'hour'
+        )
+      });
+    } else {
+      this.setState({ endDateAndTimeForMachineryUse: date });
+    }
   };
 
   handleButtonPress = () => {
@@ -97,29 +130,25 @@ class SearchReservationOptionsScreen extends Component {
       endDateAndTimeForMachineryUse
     } = this.state;
 
-    // This next code block is only being created because the API Endpoint is structured
-    // to receive date values as strings. If instead, it could receive UNIX timestamps,
-    // none of this would have been required.
-    const transformDateAndTime = inputDate => {
-      let transformedDate = inputDate
-        .toISOString()
-        .substr(0, 10)
-        .split('-')
-        .join('/');
+    /**
+     * Whenever the user initiates a Network Request by pressing the button on the
+     * screen, we ensure that the input parameters are transformed into the correct
+     * format for the API endpoint. For the date inputs, the required format is:
+     *        `2019/07/04%2020:00`
+     * We previously wrote a function to do this transformation but we can do the same
+     * now using moment.
+     * The required method for this transformation will be as follows:
+     * moment(this.state.startDateAndTimeForMachineryUse).format('YYYY/MM/DD HH:mm')
+     * moment(this.state.endDateAndTimeForMachineryUse).format('YYYY/MM/DD HH:mm')
+     *
+     */
 
-      let transformedTime = inputDate.toISOString().substr(11, 5);
-      let transformedDateAndTime = `${transformedDate} ${transformedTime}`;
-
-      return transformedDateAndTime;
-    };
-
-    let transformedStartDateAndTimeForMachineryUse = transformDateAndTime(
-      startDateAndTimeForMachineryUse
+    let transformedStartDateAndTimeForMachineryUse = moment(startDateAndTimeForMachineryUse).format(
+      'YYYY/MM/DD HH:mm'
     );
-    let transformedEndDateAndTimeForMachineryUse = transformDateAndTime(
-      endDateAndTimeForMachineryUse
+    let transformedEndDateAndTimeForMachineryUse = moment(endDateAndTimeForMachineryUse).format(
+      'YYYY/MM/DD HH:mm'
     );
-    // END OF TRANSFORMATION STEP TO PREPARE DATES FOR API ENDPOINTS
 
     const baseUrl = apiEndpoints.farmerSearchReservationOptions.url;
     const constructedUrl = `${baseUrl}?farmerNIC=${cnic}&machineType=${machineryType}&startDate=${transformedStartDateAndTimeForMachineryUse}&endDate=${transformedEndDateAndTimeForMachineryUse}`;
@@ -128,9 +157,8 @@ class SearchReservationOptionsScreen extends Component {
       /**
        * We can do input validation here. Currently, all the required except
        * for sizeOfLandInHectares have a default value in the component's state.
-       * We are placing a check here to ensure the user also provides the size
-       * of land before they can make a request.
-       * the requirements change in the future, the validation parameters can be
+       * We are placing a check here to ensure the user also provides the size of land before they can make a request.
+       * If the requirements change in the future, the validation parameters can be
        * defined and implemented here.
        */
       if (this.state.sizeOfLandInHectares === '') {
@@ -149,7 +177,7 @@ class SearchReservationOptionsScreen extends Component {
         );
         return false;
       }
-      if (!this.state.sizeOfLandInHectares.match(/^\d{0,5}(\.\d{1,2})?$/) === true) {
+      if (!this.state.sizeOfLandInHectares.match(/^\d{1,5}(\.\d{1,2})?$/) === true) {
         this.setState(
           {
             errorMessage:
@@ -293,10 +321,9 @@ class SearchReservationOptionsScreen extends Component {
           </Text>
 
           <Text style={styles.dateText} onPress={this.toggleStartDateTimePicker}>
-            {/* {this.renderDateInHumanReadableFormat(this.state.startDateAndTimeForMachineryUse)} */}
-            {`${this.state.startDateAndTimeForMachineryUse.toDateString()} ${this.state.startDateAndTimeForMachineryUse
-              .toTimeString()
-              .substr(0, 5)}`}
+            {`${moment(this.state.startDateAndTimeForMachineryUse).format(
+              'ddd DD MMM, YYYY HH:mm'
+            )}`}
           </Text>
         </View>
         <View style={styles.dateTimePickerContainer}>
@@ -320,9 +347,7 @@ class SearchReservationOptionsScreen extends Component {
           </Text>
           <Text style={styles.dateText} onPress={this.toggleEndDateTimePicker}>
             {/* {this.renderDateInHumanReadableFormat(this.state.startDateAndTimeForMachineryUse)} */}
-            {`${this.state.endDateAndTimeForMachineryUse.toDateString()} ${this.state.endDateAndTimeForMachineryUse
-              .toTimeString()
-              .substr(0, 5)}`}
+            {`${moment(this.state.endDateAndTimeForMachineryUse).format('ddd DD MMM, YYYY HH:mm')}`}
           </Text>
         </View>
         <View>
