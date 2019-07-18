@@ -354,6 +354,7 @@ class EditReservationScreen extends Component {
                   this.setState({ sizeOfLandInHectares: text }, () => console.log(this.state))
                 }
                 value={this.state.sizeOfLandInHectares}
+                keyboardType="decimal-pad"
                 placeholderTextColor="#3CB371"
                 placeholder={this.openRequestItem.area_requested}
                 autoCapitalize="none"

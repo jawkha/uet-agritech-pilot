@@ -58,6 +58,8 @@ class SearchResultsListItem extends Component {
 
 export default SearchResultsListItem;
 
+const screenWidth = Dimensions.get('window').width;
+
 const styles = StyleSheet.create({
   container: {
     height: 120,
@@ -80,7 +82,9 @@ const styles = StyleSheet.create({
     right: 0,
     paddingTop: 5,
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    paddingLeft: screenWidth > 330 ? 15 : 0,
+    paddingRight: screenWidth > 330 ? 15 : 0
   },
   machineryInfo: {
     fontWeight: 'bold',
