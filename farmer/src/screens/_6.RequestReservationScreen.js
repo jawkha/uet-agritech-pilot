@@ -228,8 +228,6 @@ const styles = StyleSheet.create({
     top: 0,
     right: 0,
     paddingTop: 5,
-    paddingLeft: 15,
-    paddingRight: 15,
     display: 'flex',
     flexDirection: 'column'
   },
@@ -254,9 +252,9 @@ const styles = StyleSheet.create({
     height: 36,
     borderRadius: 20,
     padding: 2,
+    paddingTop: 9,
     color: 'white',
     fontSize: 14,
-    lineHeight: 25,
     textAlign: 'center',
     alignItems: 'center'
   },
@@ -266,9 +264,9 @@ const styles = StyleSheet.create({
     height: 36,
     borderRadius: 20,
     padding: 2,
+    paddingTop: 9,
     color: 'white',
     fontSize: 14,
-    lineHeight: 25,
     textAlign: 'center',
     alignItems: 'center'
   },
