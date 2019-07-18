@@ -6,7 +6,8 @@ import {
   TextInput,
   TouchableOpacity,
   Dimensions,
-  Alert
+  Alert,
+  StatusBar
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -184,6 +185,7 @@ class LoginScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <StatusBar backgroundColor="#3CB371" />
         <Text style={styles.banner}>Service Recipient</Text>
         <TextInput
           style={styles.cnicInput}
