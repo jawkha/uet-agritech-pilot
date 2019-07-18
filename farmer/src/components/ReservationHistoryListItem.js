@@ -23,7 +23,10 @@ class ReservationHistoryListItem extends Component {
         <View style={styles.coloredRow}>
           <Text style={styles.coloredRowTextItem}>{moment(startDate).format('DD MMM, YYYY')}</Text>
           <Text style={styles.coloredRowTextItem}>
-            PKR {billedAmount.toFixed(0).toLocaleString()}
+            {/* Instead of using the more widely used toLocaleString() method, we are using a regex
+            because React Native does not support toLocaleString() on Android. Details about the 
+            issue can be referred to here: https://github.com/facebook/react-native/issues/16867 */}
+            PKR {billedAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           </Text>
         </View>
 
