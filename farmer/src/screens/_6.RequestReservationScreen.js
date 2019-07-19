@@ -199,8 +199,6 @@ class RequestReservationScreen extends Component {
 
 export default RequestReservationScreen;
 
-const screenWidth = Dimensions.get('window').width;
-
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
@@ -232,8 +230,8 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     display: 'flex',
     flexDirection: 'column',
-    paddingLeft: screenWidth > 330 ? 15 : 0,
-    paddingRight: screenWidth > 330 ? 15 : 0
+    paddingLeft: 1,
+    paddingRight: 1
   },
   machineryInfo: {
     fontWeight: 'bold',
