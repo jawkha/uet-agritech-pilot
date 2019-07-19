@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Dimensions, View, Text, Image, TouchableOpacity, Alert } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
+import moment from 'moment';
 
 import { apiEndpoints } from './../api/apiEndpoints';
 
@@ -71,35 +72,25 @@ class RequestReservationScreen extends Component {
       sizeOfLandInHectares
     } = navigation.getParam('userProvidedSearchInputs');
 
-    // const startDateAndTimeForMachineryUse =
-    //   userProvidedSearchInputs.startDateAndTimeForMachineryUse;
-    // const endDateAndTimeForMachineryUse = userProvidedSearchInputs.endDateAndTimeForMachineryUse;
+    /**
+     * Whenever the user initiates a Network Request by pressing the button on the
+     * screen, we ensure that the input parameters are transformed into the correct
+     * format for the API endpoint. For the date inputs, the required format is:
+     *        `2019/07/04%2020:00`
+     * We previously wrote a function to do this transformation but we can do the same
+     * now using moment.
+     * The required method for this transformation will be as follows:
+     * moment(this.state.startDateAndTimeForMachineryUse).format('YYYY/MM/DD HH:mm')
+     * moment(this.state.endDateAndTimeForMachineryUse).format('YYYY/MM/DD HH:mm')
+     *
+     */
 
-    // console.log(userData, userProvidedSearchInputs, item);
-
-    // This next code block is only being created because the API Endpoint is structured
-    // to receive date values as strings. If instead, it could receive UNIX timestamps,
-    // none of this would have been required.
-    const transformDateAndTime = inputDate => {
-      let transformedDate = inputDate
-        .toISOString()
-        .substr(0, 10)
-        .split('-')
-        .join('/');
-
-      let transformedTime = inputDate.toISOString().substr(11, 5);
-      let transformedDateAndTime = `${transformedDate} ${transformedTime}`;
-
-      return transformedDateAndTime;
-    };
-
-    let transformedStartDateAndTimeForMachineryUse = transformDateAndTime(
-      startDateAndTimeForMachineryUse
+    let transformedStartDateAndTimeForMachineryUse = moment(startDateAndTimeForMachineryUse).format(
+      'YYYY/MM/DD HH:mm'
     );
-    let transformedEndDateAndTimeForMachineryUse = transformDateAndTime(
-      endDateAndTimeForMachineryUse
+    let transformedEndDateAndTimeForMachineryUse = moment(endDateAndTimeForMachineryUse).format(
+      'YYYY/MM/DD HH:mm'
     );
-    // END OF TRANSFORMATION STEP TO PREPARE DATES FOR API ENDPOINTS
 
     const baseUrl = apiEndpoints.farmerSendReservationRequest.url;
     const constructedUrl = `${baseUrl}?fid=${fid}&oid=${oid}&mid=${mid}&startDate=${transformedStartDateAndTimeForMachineryUse}&endDate=${transformedEndDateAndTimeForMachineryUse}&areaRequested=${sizeOfLandInHectares}`;

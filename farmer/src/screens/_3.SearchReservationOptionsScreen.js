@@ -48,7 +48,7 @@ class SearchReservationOptionsScreen extends Component {
     cnic: this.userData.userCnic,
     machineryType: machineryTypeDropdownChoices[0],
     sizeOfLandInHectares: '',
-    startDateAndTimeForMachineryUse: new Date(),
+    startDateAndTimeForMachineryUse: moment(new Date()),
     endDateAndTimeForMachineryUse: moment(new Date()).add(1, 'hour'),
     showStartDateTimePicker: false,
     showEndDateTimePicker: false,
