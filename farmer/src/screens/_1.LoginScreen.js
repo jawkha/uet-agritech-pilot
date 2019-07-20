@@ -7,12 +7,14 @@ import {
   TouchableOpacity,
   Dimensions,
   Alert,
-  StatusBar
+  StatusBar,
+  Image
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import { apiEndpoints } from './../api/apiEndpoints';
+import FarmerAppLogo from './../assets/farmer-app-logo.png';
 
 class LoginScreen extends Component {
   state = {
@@ -186,7 +188,7 @@ class LoginScreen extends Component {
     return (
       <View style={styles.container}>
         <StatusBar backgroundColor="#3CB371" />
-        <Text style={styles.banner}>Service Recipient</Text>
+        <Image source={FarmerAppLogo} style={styles.logo} />
         <TextInput
           style={styles.cnicInput}
           onChangeText={this.handleCnicInputChange}
@@ -229,11 +231,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF'
   },
-  banner: {
-    color: '#3CB371',
-    fontSize: 30,
-    textAlign: 'center',
-    margin: 50
+  logo: {
+    height: 200,
+    width: 300,
+    marginBottom: 30
   },
   cnicInput: {
     height: 50,
