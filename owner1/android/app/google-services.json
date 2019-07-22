@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "427669469693",
+    "firebase_url": "https://agritech-eedb6.firebaseio.com",
+    "project_id": "agritech-eedb6",
+    "storage_bucket": "agritech-eedb6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:427669469693:android:cc2973f8b11f6f93",
+        "android_client_info": {
+          "package_name": "com.owner1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "427669469693-quokbul081kh8e2rekq2m06re1nu21k0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPcYYA8EbL9x68DMfS6G1ilbh5Zf7qcHU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "427669469693-quokbul081kh8e2rekq2m06re1nu21k0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
