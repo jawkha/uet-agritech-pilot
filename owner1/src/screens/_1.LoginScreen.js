@@ -21,8 +21,7 @@ class LoginScreen extends Component {
     cnic: '',
     password: '',
     errorMessage:
-      'Please check your login details and try again. The credentials provided are invalid.',
-    displayErrorMessage: false
+      'Please check your login details and try again. The credentials provided are invalid.'
   };
 
   static navigationOptions = {
@@ -80,10 +79,7 @@ class LoginScreen extends Component {
      * We are using a RegEx to prevent the user from entering non-digit characters
      * since we know the CNIC numbers in Pakistan are made up of only numeric characters.
      */
-    this.setState(
-      { displayErrorMessage: false, cnic: text.replace(/\D/g, '') }
-      // console.log(this.state.cnic)
-    );
+    this.setState({ displayErrorMessage: false, cnic: text.replace(/\D/g, '') });
   };
 
   handlePasswordInputChange = text => {
@@ -91,10 +87,7 @@ class LoginScreen extends Component {
      * We are using a RegEx to prevent the user from entering white space since
      * the password is expected to be a string of non-white space characters.
      */
-    this.setState(
-      { displayErrorMessage: false, password: text.replace(/\s/g, '') }
-      // console.log(this.state.password)
-    );
+    this.setState({ displayErrorMessage: false, password: text.replace(/\s/g, '') });
   };
 
   isValidCNIC = () => {
@@ -122,8 +115,23 @@ class LoginScreen extends Component {
     }
   };
 
-  handlePress = async => {
-    this.setState({ displayErrorMessage: false });
+  isDeviceOnline = async () => {
+    const NetInfoState = await NetInfo.fetch();
+    const { isConnected } = NetInfoState;
+
+    if (isConnected === false) {
+      this.setState(
+        {
+          errorMessage:
+            'You do not seem to be connected to the internet. Please check your connection settings and try again.'
+        },
+        () => this.alertUser('Error', this.state.errorMessage)
+      );
+    }
+    return isConnected;
+  };
+
+  handlePress = async () => {
     const baseUrl = apiEndpoints.ownerAuth.url;
     const { cnic, password } = this.state;
     const constructedUrl = `${baseUrl}?cnic=${cnic}&pwd=${password}`;
@@ -132,45 +140,33 @@ class LoginScreen extends Component {
        * Here we first confirm that the user is connected to the internet and
        * that a network request can be made for user login.
        */
-      return NetInfo.fetch().then(NetInfoState => {
-        console.log('Connection type', NetInfoState);
-        console.log('Is connected?', NetInfoState.isConnected);
-        if (NetInfoState.isConnected === false) {
+
+      const connectionStatus = await this.isDeviceOnline();
+      if (connectionStatus === true) {
+        console.log('Connected to internet');
+        const response = await fetch(constructedUrl);
+        const data = await response.json();
+        console.log({ data });
+
+        if (data.success === 0) {
           this.setState(
             {
               errorMessage:
-                'You do not seem to be connected to the internet. Please check your connection settings and try again.'
+                'The login credentials are incorrect. Please try again using the correct CNIC and password combination.'
             },
             () => this.alertUser('Error', this.state.errorMessage)
           );
         } else {
-          console.log('Connected to internet');
-          return fetch(constructedUrl)
-            .then(response => response.json())
-            .then(data => {
-              console.log({ data });
-              if (data.success === 0) {
-                this.setState(
-                  {
-                    errorMessage:
-                      'The login credentials are incorrect. Please try again using the correct CNIC and password combination.'
-                  },
-                  () => this.alertUser('Error', this.state.errorMessage)
-                );
-              } else {
-                console.log('Login successful');
-                const { navigation } = this.props;
-                const userData = {
-                  userCnic: this.state.cnic,
-                  userProfileData: data.Owner[0]
-                };
-                this.saveUserCnicInStorage().then(() => {
-                  navigation.navigate('Choices', { userData });
-                });
-              }
-            });
+          console.log('Login successful');
+          const { navigation } = this.props;
+          const userData = {
+            userCnic: this.state.cnic,
+            userProfileData: data.Owner[0]
+          };
+          await this.saveUserCnicInStorage();
+          navigation.navigate('Choices', { userData });
         }
-      });
+      }
     }
   };
 
