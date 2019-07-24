@@ -62,6 +62,15 @@ class LoginScreen extends Component {
     }
   };
 
+  alertUser = (type, content) => {
+    Alert.alert(type, content, [
+      {
+        text: 'OK',
+        onPress: () => console.log('OK Button pressed')
+      }
+    ]);
+  };
+
   componentDidMount() {
     this.getUserCnicFromStorage();
   }
@@ -72,8 +81,7 @@ class LoginScreen extends Component {
      * since we know the CNIC numbers in Pakistan are made up of only numeric characters.
      */
     this.setState(
-      { displayErrorMessage: false, cnic: text.replace(/\D/g, '') },
-      () => {}
+      { displayErrorMessage: false, cnic: text.replace(/\D/g, '') }
       // console.log(this.state.cnic)
     );
   };
@@ -84,8 +92,7 @@ class LoginScreen extends Component {
      * the password is expected to be a string of non-white space characters.
      */
     this.setState(
-      { displayErrorMessage: false, password: text.replace(/\s/g, '') },
-      () => {}
+      { displayErrorMessage: false, password: text.replace(/\s/g, '') }
       // console.log(this.state.password)
     );
   };
@@ -104,13 +111,12 @@ class LoginScreen extends Component {
       );
       return true;
     } else {
-      this.setState({ displayErrorMessage: true }, () =>
-        Alert.alert('Error', this.state.errorMessage, [
-          {
-            text: 'OK',
-            onPress: () => console.log('OK Button pressed')
-          }
-        ])
+      this.setState(
+        {
+          errorMessage:
+            'Please check your login details and try again. The credentials provided are invalid.'
+        },
+        () => this.alertUser('Error', this.state.errorMessage)
       );
       return false;
     }
@@ -118,7 +124,7 @@ class LoginScreen extends Component {
 
   handlePress = async => {
     this.setState({ displayErrorMessage: false });
-    const baseUrl = apiEndpoints.farmerAuth.url;
+    const baseUrl = apiEndpoints.ownerAuth.url;
     const { cnic, password } = this.state;
     const constructedUrl = `${baseUrl}?cnic=${cnic}&pwd=${password}`;
     if (this.isValidCNIC() === true) {
@@ -133,16 +139,9 @@ class LoginScreen extends Component {
           this.setState(
             {
               errorMessage:
-                'You do not seem to be connected to the internet. Please check your connection settings and try again.',
-              displayErrorMessage: true
+                'You do not seem to be connected to the internet. Please check your connection settings and try again.'
             },
-            () =>
-              Alert.alert('Error', this.state.errorMessage, [
-                {
-                  text: 'OK',
-                  onPress: () => console.log('OK Button pressed')
-                }
-              ])
+            () => this.alertUser('Error', this.state.errorMessage)
           );
         } else {
           console.log('Connected to internet');
@@ -154,23 +153,16 @@ class LoginScreen extends Component {
                 this.setState(
                   {
                     errorMessage:
-                      'The login credentials are incorrect. Please try again using the correct CNIC and password combination.',
-                    displayErrorMessage: true
+                      'The login credentials are incorrect. Please try again using the correct CNIC and password combination.'
                   },
-                  () =>
-                    Alert.alert('Error', this.state.errorMessage, [
-                      {
-                        text: 'OK',
-                        onPress: () => console.log('OK Button pressed')
-                      }
-                    ])
+                  () => this.alertUser('Error', this.state.errorMessage)
                 );
               } else {
                 console.log('Login successful');
                 const { navigation } = this.props;
                 const userData = {
                   userCnic: this.state.cnic,
-                  userProfileData: data.farmer[0]
+                  userProfileData: data.Owner[0]
                 };
                 this.saveUserCnicInStorage().then(() => {
                   navigation.navigate('Choices', { userData });
@@ -211,9 +203,6 @@ class LoginScreen extends Component {
         <TouchableOpacity style={styles.button} onPress={this.handlePress}>
           <Text style={styles.buttonText}>LOGIN</Text>
         </TouchableOpacity>
-        {/* {this.state.displayErrorMessage && (
-          <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
-        )} */}
       </View>
     );
   }
