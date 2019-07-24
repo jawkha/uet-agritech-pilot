@@ -1,49 +1,31 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
+import React from 'react';
+import { createStackNavigator, createAppContainer } from 'react-navigation';
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import LoginScreen from './src/screens/_1.LoginScreen';
+import ChoicesScreen from './src/screens/_2.ChoicesScreen';
+import RequestsListScreen from './src/screens/_3.RequestsListScreen';
+import DecideRequestScreen from './src/screens/_4.DecideRequestScreen';
+import AcceptanceConfirmationScreen from './src/screens/_5.AcceptanceConfirmationScreen';
+import RejectionConfirmationScreen from './src/screens/_6.RejectionConfirmationScreen';
+import ReservationsListScreen from './src/screens/_7.ReservationsListScreen';
+import ReservationDetailScreen from './src/screens/_8.ReservationDetailScreen';
+import ReservationsHistoryScreen from './src/screens/_9.ReservationsHistoryScreen';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
-
-type Props = {};
-export default class App extends Component<Props> {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-      </View>
-    );
+const AppNavigator = createStackNavigator(
+  {
+    Home: LoginScreen,
+    Choices: ChoicesScreen,
+    RequestsList: RequestsListScreen,
+    DecideRequest: DecideRequestScreen,
+    AcceptanceConfirmation: AcceptanceConfirmationScreen,
+    RejectionConfirmation: RejectionConfirmationScreen,
+    ReservationsList: ReservationsListScreen,
+    ReservationDetail: ReservationDetailScreen,
+    ReservationsHistory: ReservationsHistoryScreen
+  },
+  {
+    initialRouteName: 'Home'
   }
-}
+);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+export default createAppContainer(AppNavigator);
