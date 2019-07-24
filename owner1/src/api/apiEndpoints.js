@@ -1,227 +1,104 @@
 export const apiEndpoints = {
-  farmerAuth: {
+  ownerAuth: {
     url:
-      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/farmerAuthentication.php',
+      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/ownerAuthentication.php',
     exampleInput:
-      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/farmerAuthentication.php?cnic=1330201777553&pwd=12345',
+      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/ownerAuthentication.php?cnic=1330201777553;pwd=12345',
     successResponse: {
-      farmer: [
+      success: 1,
+      message: 'Authentication successful',
+      Owner: [
         {
           id: '1',
-          name: 'Ali Ahmad',
+          name: 'Ali Khan',
           address: 'hno1,sector1,abc,def',
-          gis_location_lat: '33.962770',
-          gis_location_lng: '71.446432'
+          gis_location_lat: '33.9665277',
+          gis_location_lng: '71.4444512'
         }
-      ],
-      success: 1,
-      message: 'Authentication successful'
+      ]
     },
     failureResponse: {
       success: 0,
       message: 'CNIC Or Password Invalid!'
     }
   },
-  farmerSearchReservationOptions: {
+  ownerViewPendingRequests: {
     url:
-      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/AvailableMachinesForReservation.php',
+      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/ownerReservationsByCNIC.php',
     exampleInput:
-      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/AvailableMachinesForReservation.php?farmerNIC=1330201777553&startDate=2019/07/04%2020:00&endDate=2019/07/04%2021:30&machineType=Rotavator',
-    successResponse: {
-      success: 1,
-      farmer: [
-        {
-          id: '1',
-          name: 'Ali',
-          fname: 'Ahmad',
-          lat: '33.962770',
-          lng: '71.446432'
-        }
-      ],
-      owner: [
-        {
-          id: '2',
-          name: 'Mustafa',
-          fname: 'Rahman',
-          lat: '33.96751',
-          lng: '71.4444512',
-          address: 'hno1,sector1,abc,def',
-          mid: '5',
-          reg_no: 'reg456',
-          make: 'FIAT',
-          model: '2000',
-          length: '5',
-          width: '2.5',
-          height: '4',
-          dist: '0.56'
-        },
-        {
-          id: '7',
-          name: 'Shah',
-          fname: 'Jahan',
-          lat: '33.995579',
-          lng: '71.496725',
-          address: 'university town peshawar',
-          mid: '7',
-          reg_no: '4536',
-          make: 'Ferguson',
-          model: '2010',
-          length: '1',
-          width: '2.5',
-          height: '1',
-          dist: '5.90'
-        }
-      ]
-    },
-    failureResponse: {
-      success: 0,
-      farmer: [
-        {
-          id: '1',
-          name: 'Ali',
-          fname: 'Ahmad',
-          lat: '33.962770',
-          lng: '71.446432'
-        }
-      ],
-      owner: [],
-      message: 'No machine available for the specified time.'
-    }
-  },
-  farmerSendReservationRequest: {
-    url:
-      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/makeReservationForFarmer.php',
-    exampleInput:
-      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/makeReservationForFarmer.php?fid=1&oid=7&mid=7&startDate=2019-06-25%2011:00:00&endDate=2019-06-25%2013:00:00&areaRequested=5',
-    successResponse: {
-      success: 1,
-      message: 'Reservation request is submitted. Please, wait for reservation process'
-    },
-    failureResponse: null
-  },
-  farmerListOpenReservations: {
-    url:
-      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/farmerReservationsByCNIC.php',
-    exampleInput:
-      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/farmerReservationsByCNIC.php?cnic=3120244533247',
+      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/ownerReservationsByCNIC.php?cnic=1330201777553',
     successResponse: {
       success: 1,
       reservations: [
         {
-          rid: '65',
-          farmer_id: '16',
-          mid: '18',
-          status: 'notGranted',
-          owner_id: '13',
-          start_date: '2019-06-27 13:00:00',
-          end_date: '2019-06-27 14:00:00',
-          area_requested: '24',
+          rid: '68',
+          farmer_id: '9',
+          mid: '1',
+          status: 'pending',
+          owner_id: '1',
+          start_date: '2019-06-06 03:00:00',
+          end_date: '2019-06-20 01:52:00',
+          area_requested: '2',
           data_link: null,
-          request_date: '2019-06-27 12:36:46',
-          Name: 'Mazhar Fareed',
-          address: 'Ext Bahawalpur Farm',
-          machineType: 'Rotavator',
-          width: '1.7',
-          make: 'Massey',
-          model: 'MF385',
-          'owner name': 'Bahawalpur Farm',
-          owner_address: 'Ext Farm Bahawalpur',
-          dist: '0.00'
+          request_date: '2019-07-01 01:52:40',
+          farmer_name: 'Bilal Sheikh',
+          farmer_address: 'phase 2, hayatabad, peshawar',
+          machineType: 'Leveler',
+          width: '5',
+          make: 'make',
+          model: 'model',
+          'owner name': 'Ali Khan',
+          owner_address: 'hno1,sector1,abc,def',
+          dist: '8,305.53'
         }
       ]
     },
     failureResponse: {
       success: 0,
-      message: 'Currently, no reservation requests by Service Reccipient'
+      message: "Service Provider's CNIC is not registered"
     }
   },
-  farmerDeleteReservationRequest: {
+  ownerAcceptRequest: {
     url:
-      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/deleteFarmerReservationRequestByRID.php',
+      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/ownerAcceptOrRejectRequest.php',
     exampleInput:
-      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/deleteFarmerReservationRequestByRID.php?rid=86',
+      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/ownerAcceptOrRejectRequest.php?rid=62&status=accepted',
     successResponse: {
-      success: 1,
-      message: 'Reservation request deleted.'
+      success: 1
     },
     failureResponse: {
-      success: 0,
-      message: 'Reservation can not be found/deleted.'
+      success: 0
     }
   },
-  farmerCompletedReservationsHistory: {
+  ownerRejectRequest: {
     url:
-      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/farmerCompletedReservationsByCNIC.php',
+      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/ownerAcceptOrRejectRequest.php',
     exampleInput:
-      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/farmerCompletedReservationsByCNIC.php?cnic=1330201777553',
+      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/ownerAcceptOrRejectRequest.php?rid=62&status=notAccepted',
     successResponse: {
-      success: 1,
-      reservations: [
-        {
-          rid: '58',
-          billAmount: 0,
-          farmer_id: '1',
-          mid: '7',
-          status: 'Completed',
-          owner_id: '2',
-          start_date: '2019-06-02 17:00:00',
-          end_date: '2019-06-02 18:00:00',
-          area_requested: '12',
-          data_link: 'https://agritechstorage.s3.amazonaws.com/Sandbox/fullApptesting/68.csv',
-          request_date: '2019-06-02 17:00:00',
-          actual_area: '5169.844159003002',
-          authenticity: 'False',
-          FarmerName: 'Ali',
-          FarmerLastName: 'Ahmad',
-          machineType: 'Rotavator',
-          OwnerName: 'Mustafa',
-          OwnerLastName: 'Rahman'
-        },
-        {
-          rid: '59',
-          billAmount: 0,
-          farmer_id: '1',
-          mid: '9',
-          status: 'Completed',
-          owner_id: '2',
-          start_date: '2019-06-02 17:00:00',
-          end_date: '2019-06-02 18:00:00',
-          area_requested: '14',
-          data_link: 'https://agritechstorage.s3.amazonaws.com/Sandbox/fullApptesting/59.csv',
-          request_date: '2019-06-02 17:00:00',
-          actual_area: '345.5784719050249',
-          authenticity: 'False',
-          FarmerName: 'Ali',
-          FarmerLastName: 'Ahmad',
-          machineType: 'Cultivator',
-          OwnerName: 'Mustafa',
-          OwnerLastName: 'Rahman'
-        },
-        {
-          rid: '60',
-          billAmount: 0,
-          farmer_id: '1',
-          mid: '15',
-          status: 'Completed',
-          owner_id: '2',
-          start_date: '2019-06-02 17:00:00',
-          end_date: '2019-06-02 18:00:00',
-          area_requested: '1',
-          data_link: 'https://agritechstorage.s3.amazonaws.com/Sandbox/fullApptesting/60.csv',
-          request_date: '2019-06-02 17:00:00',
-          actual_area: '267173.29941861215',
-          authenticity: 'False',
-          FarmerName: 'Ali',
-          FarmerLastName: 'Ahmad',
-          machineType: 'Cultivator',
-          OwnerName: 'Mustafa',
-          OwnerLastName: 'Rahman'
-        }
-      ]
+      success: 1
     },
     failureResponse: {
-      success: 0,
-      message: 'No reservation found.'
+      success: 0
     }
+  },
+  ownerViewAcceptedRequests: {
+    url:
+      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/ownerAcceptedReservationsByCNIC.php',
+    exampleInput:
+      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/ownerAcceptedReservationsByCNIC.php?cnic=1330201777553',
+    successResponse: null,
+    failureResponse: {
+      success: 0,
+      message: 'Currently, no reservation acceted by Service Provide'
+    }
+  },
+  ownerViewHistory: {
+    url:
+      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/ownerCompletedReservationsByCNIC.php',
+    exampleInput:
+      'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/ownerCompletedReservationsByCNIC.php?cnic=1330201777553',
+    successResponse: null,
+    failureResponse: null
   }
 };
