@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+
+import { apiEndpoints } from './../api/apiEndpoints';
+import ListContainer from './../components/ListContainer';
+import ReservationItem from './../components/ReservationItem';
 
 class ReservationsListScreen extends Component {
   state = {};
@@ -12,9 +15,10 @@ class ReservationsListScreen extends Component {
 
   render() {
     return (
-      <View>
-        <Text>ReservationsListScreen</Text>
-      </View>
+      <ListContainer
+        baseUrl={apiEndpoints.ownerViewAcceptedRequests.url}
+        ChildComponent={ReservationItem}
+      />
     );
   }
 }

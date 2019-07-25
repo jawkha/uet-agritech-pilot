@@ -72,13 +72,13 @@ export default RequestItem;
 
 const styles = StyleSheet.create({
   itemContainer: {
-    height: 320,
+    height: 350,
     width: Dimensions.get('window').width,
     borderColor: '#2491F6',
     borderWidth: 1
   },
   coloredContainer: {
-    height: 250,
+    height: 280,
     width: Dimensions.get('window').width,
     backgroundColor: 'rgba(36, 145, 246, 0.75)',
     display: 'flex',
@@ -122,6 +122,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal'
   },
   areaRequested: {
+    marginTop: 15,
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'normal'

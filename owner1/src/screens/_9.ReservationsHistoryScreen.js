@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+
+import { apiEndpoints } from './../api/apiEndpoints';
+import ListContainer from './../components/ListContainer';
+import HistoryItem from './../components/HistoryItem';
 
 class ReservationsHistoryScreen extends Component {
   state = {};
@@ -12,9 +15,7 @@ class ReservationsHistoryScreen extends Component {
 
   render() {
     return (
-      <View>
-        <Text>ReservationsHistoryScreen</Text>
-      </View>
+      <ListContainer baseUrl={apiEndpoints.ownerViewHistory.url} ChildComponent={HistoryItem} />
     );
   }
 }

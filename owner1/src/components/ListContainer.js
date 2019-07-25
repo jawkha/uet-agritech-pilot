@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Alert } from 'react-native';
+import { ScrollView, Text, Alert } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -73,14 +73,14 @@ class ListContainer extends Component {
     const { ChildComponent } = this.props;
     const { isFetchingData } = this.state;
     return (
-      <View>
+      <ScrollView>
         {isFetchingData && <Text>Fetching data</Text>}
         {this.state.reservations &&
           this.state.reservations.length > 0 &&
           this.state.reservations.map((item, index) => {
             return <ChildComponent key={index} item={item} />;
           })}
-      </View>
+      </ScrollView>
     );
   }
 }
