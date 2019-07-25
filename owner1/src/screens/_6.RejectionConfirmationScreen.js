@@ -3,6 +3,13 @@ import { View, Text } from 'react-native';
 
 class RejectionConfirmationScreen extends Component {
   state = {};
+
+  static navigationOptions = () => {
+    return {
+      title: 'CONFIRM REJECTION'
+    };
+  };
+
   render() {
     return (
       <View>

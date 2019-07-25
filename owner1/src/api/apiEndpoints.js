@@ -87,7 +87,32 @@ export const apiEndpoints = {
       'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/ownerAcceptedReservationsByCNIC.php',
     exampleInput:
       'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/ownerAcceptedReservationsByCNIC.php?cnic=1330201777553',
-    successResponse: null,
+    successResponse: {
+      success: 1,
+      reservations: [
+        {
+          rid: '61',
+          farmer_id: '13',
+          mid: '16',
+          status: 'accepted',
+          owner_id: '11',
+          start_date: '2019-06-26 11:00:00',
+          end_date: '2019-06-26 12:00:00',
+          area_requested: '1',
+          data_link: null,
+          request_date: '2019-06-26 10:45:19',
+          farmer_name: 'Manzoor Hussain',
+          farmer_address: 'chak# 19,piplan, Mianwali',
+          machineType: 'Rotavator',
+          width: '2.8',
+          make: 'Massey',
+          model: 'MF385',
+          'owner name': 'Piplan Farm',
+          owner_address: 'Piplan AR Farm',
+          dist: '8,270.45'
+        }
+      ]
+    },
     failureResponse: {
       success: 0,
       message: 'Currently, no reservation acceted by Service Provide'
@@ -98,7 +123,34 @@ export const apiEndpoints = {
       'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/ownerCompletedReservationsByCNIC.php',
     exampleInput:
       'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/ownerCompletedReservationsByCNIC.php?cnic=1330201777553',
-    successResponse: null,
+    successResponse: {
+      success: 1,
+      reservations: [
+        {
+          rid: '61',
+          billAmount: 0,
+          farmer_id: '13',
+          mid: '16',
+          status: 'Completed',
+          owner_id: '11',
+          start_date: '2019-06-26 11:00:00',
+          end_date: '2019-06-26 12:00:00',
+          area_requested: '1',
+          data_link: 'https://agritechstorage.s3.amazonaws.com/Sandbox/fullApptesting/61.csv',
+          request_date: '2019-06-26 10:45:19',
+          actual_area: '3246.141712',
+          authenticity: 'False',
+          FarmerName: 'Manzoor',
+          FarmerLastName: 'Hussain',
+          machineType: 'Rotavator',
+          make: 'Massey',
+          model: 'MF385',
+          OwnerName: 'Piplan',
+          OwnerLastName: 'Farm',
+          address: 'Piplan AR Farm'
+        }
+      ]
+    },
     failureResponse: null
   }
 };

@@ -1,13 +1,22 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+
+import { apiEndpoints } from './../api/apiEndpoints';
+import ListContainer from './../components/ListContainer';
+import RequestItem from './../components/RequestItem';
 
 class RequestsListScreen extends Component {
-  state = {};
+  static navigationOptions = () => {
+    return {
+      title: 'OPEN REQUESTS'
+    };
+  };
+
   render() {
     return (
-      <View>
-        <Text>RequestsListScreen</Text>
-      </View>
+      <ListContainer
+        baseUrl={apiEndpoints.ownerViewPendingRequests.url}
+        ChildComponent={RequestItem}
+      />
     );
   }
 }

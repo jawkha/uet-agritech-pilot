@@ -24,7 +24,13 @@ const AppNavigator = createStackNavigator(
     ReservationsHistory: ReservationsHistoryScreen
   },
   {
-    initialRouteName: 'Home'
+    initialRouteName: 'Home',
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: '#2491F6'
+      },
+      headerTintColor: '#FFFFFF'
+    }
   }
 );
 

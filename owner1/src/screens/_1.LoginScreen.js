@@ -24,12 +24,6 @@ class LoginScreen extends Component {
       'Please check your login details and try again. The credentials provided are invalid.'
   };
 
-  static navigationOptions = {
-    headerStyle: {
-      backgroundColor: '#2491F6'
-    }
-  };
-
   getUserCnicFromStorage = async () => {
     try {
       const userCnic = await AsyncStorage.getItem('@cnic');

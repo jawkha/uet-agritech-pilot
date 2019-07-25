@@ -6,15 +6,7 @@ import { apiEndpoints } from './../api/apiEndpoints';
 
 class ChoicesScreen extends Component {
   state = {
-    errorMessage: 'Generic error message. Customise it according to the nature of the error.',
-    displayErrorMessage: false
-  };
-
-  static navigationOptions = {
-    headerStyle: {
-      backgroundColor: '#2491F6'
-    },
-    headerTintColor: '#FFFFFF'
+    errorMessage: 'Generic error message. Customise it according to the nature of the error.'
   };
 
   get userProfile() {
@@ -23,35 +15,41 @@ class ChoicesScreen extends Component {
     return userData;
   }
 
-  handlePressMakeAReservationButton = async => {
-    console.log('View Open Requests button pressed', this.userProfile);
+  handlePendingReservationsButtonPress = () => {
+    this.props.navigation.navigate('RequestsList', { userData: this.userProfile });
   };
 
-  handlePressViewOpenRequestsButton = async => {
-    console.log('View Open Requests button pressed', this.userProfile);
+  handleAcceptedReservationsButtonPress = () => {
+    this.props.navigation.navigate('ReservationsList', { userData: this.userProfile });
   };
 
-  handlePressViewHistoryButton = async => {
-    console.log('View History button pressed');
+  handleReservationHistoryButtonPress = () => {
+    this.props.navigation.navigate('ReservationsHistory', { userData: this.userProfile });
   };
 
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={this.handlePressMakeAReservationButton}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={this.handlePendingReservationsButtonPress}
+          >
             <Text style={styles.buttonText}>PENDING RESERVATIONS</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={this.handlePressViewOpenRequestsButton}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={this.handleAcceptedReservationsButtonPress}
+          >
             <Text style={styles.buttonText}>ACCEPTED RESERVATIONS</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={this.handlePressViewHistoryButton}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={this.handleReservationHistoryButtonPress}
+          >
             <Text style={styles.buttonText}>RESERVATION HISTORY</Text>
           </TouchableOpacity>
         </View>
-        {/* {this.state.displayErrorMessage && (
-          <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
-        )} */}
       </View>
     );
   }
