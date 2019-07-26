@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-import { ScrollView, Text, Alert } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import AsyncStorage from '@react-native-community/async-storage';
 
+import NoReservations from './NoReservations';
+
 class ListContainer extends Component {
   state = {
-    isFetchingData: true
+    isFetchingData: true,
+    noReservations: false
   };
 
   alertUser = (type, content) => {
@@ -49,13 +52,19 @@ class ListContainer extends Component {
       const data = await response.json();
       console.log({ data });
 
-      if (data.success === 0) {
+      if (data.success === 0 && data.message === undefined) {
         this.setState(
           {
-            errorMessage: 'There was an error in fetching data from the server.'
+            errorMessage: 'There was an error in fetching data from the server.',
+            isFetchingData: false
           },
           () => this.alertUser('Error', this.state.errorMessage)
         );
+      } else if (
+        data.success === 0 &&
+        data.message === 'Currently, no reservation requests for Service Provider'
+      ) {
+        this.setState({ noReservations: true, isFetchingData: false });
       } else {
         console.log('Data fetched from the server.');
         const { reservations } = data;
@@ -74,7 +83,8 @@ class ListContainer extends Component {
     const { isFetchingData } = this.state;
     return (
       <ScrollView>
-        {isFetchingData && <Text>Fetching data</Text>}
+        {isFetchingData ? <ActivityIndicator size="large" color="#2491F6" /> : null}
+        {this.state.noReservations ? <NoReservations /> : null}
         {this.state.reservations &&
           this.state.reservations.length > 0 &&
           this.state.reservations.map((item, index) => {

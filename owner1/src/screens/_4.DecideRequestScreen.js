@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
-import { StyleSheet, Dimensions, TouchableOpacity, View, Text } from 'react-native';
+import { StyleSheet, Dimensions, TouchableOpacity, View, Text, Alert } from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
 import { withNavigation } from 'react-navigation';
 
 import RequestItem from './../components/RequestItem';
+import { apiEndpoints } from './../api/apiEndpoints';
 
 class DecideRequestScreen extends Component {
-  state = {};
+  state = {
+    errorMessage: ''
+  };
 
   static navigationOptions = () => {
     return {
@@ -13,14 +17,104 @@ class DecideRequestScreen extends Component {
     };
   };
 
-  handlePressRejectButton = () => {
-    console.log('Reject button pressed');
-    this.props.navigation.navigate('RejectionConfirmation');
+  alertUser = (type, content) => {
+    Alert.alert(type, content, [
+      {
+        text: 'OK',
+        onPress: () => console.log('OK Button pressed')
+      }
+    ]);
   };
 
-  handlePressAcceptButton = () => {
+  alertUserAboutServerError = () => {
+    this.setState(
+      {
+        errorMessage: 'An error occurred in sending your decision to the server. Please try again.'
+      },
+      () => this.alertUser('Error', this.state.errorMessage)
+    );
+  };
+
+  isDeviceOnline = async () => {
+    const NetInfoState = await NetInfo.fetch();
+    const { isConnected } = NetInfoState;
+
+    if (isConnected === false) {
+      this.setState(
+        {
+          errorMessage:
+            'You do not seem to be connected to the internet. Please check your connection settings and try again.'
+        },
+        () => this.alertUser('Error', this.state.errorMessage)
+      );
+    }
+    return isConnected;
+  };
+
+  handlePressRejectButton = async () => {
+    console.log('Reject button pressed');
+    const { navigation } = this.props;
+    const item = navigation.getParam('item');
+    const baseUrl = apiEndpoints.ownerRejectRequest.url;
+    const constructedUrl = `${baseUrl}?rid=${item.rid}&status=notAccepted`;
+    /**
+     * Here we first confirm that the user is connected to the internet and
+     * that a network request can be made for user login.
+     */
+
+    const connectionStatus = await this.isDeviceOnline();
+    if (connectionStatus === true) {
+      console.log('Connected to internet');
+      const response = await fetch(constructedUrl);
+      const data = await response.json();
+      console.log({ data });
+
+      if (data.success === 0) {
+        this.alertUserAboutServerError();
+        // this.setState(
+        //   {
+        //     errorMessage:
+        //       'An error occurred in sending your decision to the server. Please try again.'
+        //   },
+        //   () => this.alertUser('Error', this.state.errorMessage)
+        // );
+      } else {
+        this.props.navigation.navigate('RejectionConfirmation');
+      }
+    }
+  };
+
+  handlePressAcceptButton = async () => {
     console.log('Accept button pressed');
-    this.props.navigation.navigate('AcceptanceConfirmation');
+    const { navigation } = this.props;
+    const item = navigation.getParam('item');
+    const baseUrl = apiEndpoints.ownerAcceptRequest.url;
+    const constructedUrl = `${baseUrl}?rid=${item.rid}&status=accepted`;
+    /**
+     * Here we first confirm that the user is connected to the internet and
+     * that a network request can be made for user login.
+     */
+
+    const connectionStatus = await this.isDeviceOnline();
+    if (connectionStatus === true) {
+      console.log('Connected to internet');
+      const response = await fetch(constructedUrl);
+      const data = await response.json();
+      console.log({ data });
+
+      if (data.success === 0) {
+        this.alertUserAboutServerError();
+        // this.setState(
+        //   {
+        //     errorMessage:
+        //       'An error occurred in sending your decision to the server. Please try again.'
+        //   },
+        //   () => this.alertUser('Error', this.state.errorMessage)
+        // );
+      } else {
+        this.props.navigation.navigate('AcceptanceConfirmation');
+      }
+    }
   };
 
   render() {

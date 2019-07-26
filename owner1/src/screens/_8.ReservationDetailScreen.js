@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import ReservationItem from './../components/ReservationItem';
+import { withNavigation } from 'react-navigation';
 
 class ReservationDetailScreen extends Component {
   state = {};
@@ -11,12 +12,10 @@ class ReservationDetailScreen extends Component {
   };
 
   render() {
-    return (
-      <View>
-        <Text>ReservationDetailScreen</Text>
-      </View>
-    );
+    const { navigation } = this.props;
+    const item = navigation.getParam('item');
+    return <ReservationItem item={item} />;
   }
 }
 
-export default ReservationDetailScreen;
+export default withNavigation(ReservationDetailScreen);

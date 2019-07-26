@@ -1,5 +1,10 @@
+/* eslint-disable quotes */
+/* eslint-disable no-unused-vars */
+/* eslint-disable comma-dangle */
+/* eslint-disable prettier/prettier */
 import React, { Component } from 'react';
 import { StyleSheet, Dimensions, TouchableOpacity, View, Text, Image } from 'react-native';
+import { withNavigation } from 'react-navigation';
 import moment from 'moment';
 
 import {
@@ -10,6 +15,11 @@ import {
 import farmerImage from './../assets/farmer-image.png';
 
 class ReservationItem extends Component {
+  handleItemPress = item => {
+    const { navigation } = this.props;
+    navigation.navigate('ReservationDetail', { item });
+  };
+
   render() {
     const {
       request_date: requestDate,
@@ -27,7 +37,7 @@ class ReservationItem extends Component {
     return (
       <TouchableOpacity
         style={styles.itemContainer}
-        onPress={() => this.props.handleItemPress(this.props.openRequestItem)}
+        onPress={() => this.handleItemPress(this.props.item)}
       >
         <View style={styles.coloredContainer}>
           <View style={styles.coloredRow}>
@@ -71,7 +81,7 @@ class ReservationItem extends Component {
   }
 }
 
-export default ReservationItem;
+export default withNavigation(ReservationItem);
 
 const styles = StyleSheet.create({
   itemContainer: {
