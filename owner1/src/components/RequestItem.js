@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Dimensions, TouchableOpacity, View, Text, Image } from 'react-native';
+import { withNavigation } from 'react-navigation';
 import moment from 'moment';
 
 import {
@@ -10,6 +11,11 @@ import {
 import farmerImage from './../assets/farmer-image.png';
 
 class RequestItem extends Component {
+  handleItemPress = item => {
+    const { navigation } = this.props;
+    navigation.navigate('DecideRequest', { item });
+  };
+
   render() {
     const {
       request_date: requestDate,
@@ -27,7 +33,7 @@ class RequestItem extends Component {
     return (
       <TouchableOpacity
         style={styles.itemContainer}
-        onPress={() => this.props.handleItemPress(this.props.openRequestItem)}
+        onPress={() => this.handleItemPress(this.props.item)}
       >
         <View style={styles.coloredContainer}>
           <View style={styles.coloredRow}>
@@ -68,7 +74,7 @@ class RequestItem extends Component {
   }
 }
 
-export default RequestItem;
+export default withNavigation(RequestItem);
 
 const styles = StyleSheet.create({
   itemContainer: {
