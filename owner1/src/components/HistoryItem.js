@@ -1,3 +1,8 @@
+/* eslint-disable no-trailing-spaces */
+/* eslint-disable quotes */
+/* eslint-disable no-unused-vars */
+/* eslint-disable comma-dangle */
+/* eslint-disable prettier/prettier */
 import React, { Component } from 'react';
 import { StyleSheet, Dimensions, View, Text } from 'react-native';
 import moment from 'moment';
@@ -23,10 +28,16 @@ class ReservationHistoryListItem extends Component {
         <View style={styles.coloredRow}>
           <Text style={styles.coloredRowTextItem}>{moment(startDate).format('DD MMM, YYYY')}</Text>
           <Text style={styles.coloredRowTextItem}>
-            {/* Instead of using the more widely used toLocaleString() method, we are using a regex
-            because React Native does not support toLocaleString() on Android. Details about the 
-            issue can be referred to here: https://github.com/facebook/react-native/issues/16867 */}
-            PKR {billedAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            {/* Previous versions of JavaScript engines used in React Native could not use the
+            commonly used toLocaleString() method. Therefore, in the other UET agritech apps, we
+            used the following regex to ensure thousand separator is displayed in the billed amount.
+              PKR {billedAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} 
+            In the new Hermes JavaScript engine, we can use toLocaleString() now by selecting the 
+            international flavor of JavaScript core in `android/app/build.gradle`:
+              def jscFlavor = 'org.webkit:android-jsc-intl:+'
+            */}
+            {/* PKR {billedAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} */}
+            PKR {billedAmount.toLocaleString()}
           </Text>
         </View>
 

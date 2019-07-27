@@ -1,3 +1,5 @@
+/* eslint-disable comma-dangle */
+/* eslint-disable prettier/prettier */
 import React, { Component } from 'react';
 import { StyleSheet, Dimensions, TouchableOpacity, View, Text, Alert } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';

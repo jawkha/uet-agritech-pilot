@@ -1,3 +1,5 @@
+/* eslint-disable comma-dangle */
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { withNavigation } from 'react-navigation';

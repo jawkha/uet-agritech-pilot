@@ -1,3 +1,5 @@
+/* eslint-disable comma-dangle */
+/* eslint-disable prettier/prettier */
 import React, { Component } from 'react';
 import ReservationItem from './../components/ReservationItem';
 import { withNavigation } from 'react-navigation';

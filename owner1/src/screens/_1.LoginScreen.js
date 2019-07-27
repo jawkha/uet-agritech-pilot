@@ -1,3 +1,7 @@
+/* eslint-disable quotes */
+/* eslint-disable no-unused-vars */
+/* eslint-disable comma-dangle */
+/* eslint-disable prettier/prettier */
 import React, { Component } from 'react';
 import {
   StyleSheet,

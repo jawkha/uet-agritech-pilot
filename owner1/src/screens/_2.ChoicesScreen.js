@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable comma-dangle */
+/* eslint-disable prettier/prettier */
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
 // import NetInfo from '@react-native-community/netinfo';
