@@ -3,9 +3,7 @@
 /* eslint-disable prettier/prettier */
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
-// import NetInfo from '@react-native-community/netinfo';
-
-import { apiEndpoints } from './../api/apiEndpoints';
+import firebase from 'react-native-firebase';
 
 class ChoicesScreen extends Component {
   state = {
@@ -17,6 +15,32 @@ class ChoicesScreen extends Component {
     const userData = navigation.getParam('userData');
     return userData;
   }
+
+  componentDidMount = async () => {
+    const enabled = await firebase.messaging().hasPermission();
+    if (enabled) {
+      console.log('Permission to receive Firebase messages::::: true');
+      firebase
+        .messaging()
+        .getToken()
+        .then(fcmToken => {
+          if (fcmToken) {
+            console.log({ fcmToken });
+          } else {
+            console.log('No device token for FCM');
+          }
+        });
+      this.messageListener = firebase.messaging().onMessage(message => {
+        console.log('Reacting to firebase messages on Choices screen', { message });
+      });
+    } else {
+      await firebase.messaging().requestPermission();
+    }
+  };
+
+  componentWillUnmount = () => {
+    this.messageListener();
+  };
 
   handlePendingReservationsButtonPress = () => {
     this.props.navigation.navigate('RequestsList', { userData: this.userProfile });
