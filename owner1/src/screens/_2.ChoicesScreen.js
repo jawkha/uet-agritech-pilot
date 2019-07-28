@@ -20,19 +20,43 @@ class ChoicesScreen extends Component {
     const enabled = await firebase.messaging().hasPermission();
     if (enabled) {
       console.log('Permission to receive Firebase messages::::: true');
-      firebase
-        .messaging()
-        .getToken()
-        .then(fcmToken => {
-          if (fcmToken) {
-            console.log({ fcmToken });
-          } else {
-            console.log('No device token for FCM');
-          }
+      const fcmToken = await firebase.messaging().getToken();
+      if (fcmToken) {
+        console.log({ fcmToken });
+        this.messageListener = firebase.messaging().onMessage(message => {
+          console.log('Reacting to firebase messages on Choices screen', { message });
         });
-      this.messageListener = firebase.messaging().onMessage(message => {
-        console.log('Reacting to firebase messages on Choices screen', { message });
-      });
+
+        this.notificationDisplayedListener = firebase
+          .notifications()
+          .onNotificationDisplayed(notification => {
+            console.log(
+              'Reacting to firebase notification on Choices screen from notificationDisplayedListener',
+              { notification }
+            );
+          });
+        this.notificationListener = firebase.notifications().onNotification(notification => {
+          console.log(
+            'Reacting to firebase notification on Choices screen from notificationListener',
+            { notification }
+          );
+        });
+
+        this.notificationOpenedListener = firebase
+          .notifications()
+          .onNotificationOpened(notificationOpen => {
+            // Get the action triggered by the notification being opened
+            const action = notificationOpen.action;
+            // Get information about the notification that was opened
+            const notificationOpenedConst = notificationOpen.notification;
+            console.log({ action }, { notificationOpenedConst });
+          });
+      } else {
+        console.log('No device token for FCM');
+        this.onTokenRefreshListener = firebase.messaging().onTokenRefresh(fcmToken => {
+          console.log('New FCM token generated', { fcmToken });
+        });
+      }
     } else {
       await firebase.messaging().requestPermission();
     }
@@ -40,6 +64,10 @@ class ChoicesScreen extends Component {
 
   componentWillUnmount = () => {
     this.messageListener();
+    this.onTokenRefreshListener();
+    this.notificationDisplayedListener();
+    this.notificationListener();
+    this.notificationOpenedListener();
   };
 
   handlePendingReservationsButtonPress = () => {
