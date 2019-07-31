@@ -22,6 +22,31 @@ export const apiEndpoints = {
       message: 'CNIC Or Password Invalid!'
     }
   },
+  ownerDeviceTokenRegistration: {
+    url: 'https://kf5t8rvhvf.execute-api.us-west-2.amazonaws.com/prod/data',
+    exampleInput:
+      'https://kf5t8rvhvf.execute-api.us-west-2.amazonaws.com/prod/data?oid=1&token=evZm-0sCQCY:APA91bE7NAuxuE5Fn0PUNw7oPJwYzDH4QduasMpFiwXI5yYN0T0og4Kj3N6faVFNDBqiwBFJpPN5rAf2rTuwcb-TPjrmhvBH0-r0p2q5FkqmdModrKOW_0ZDu_i0JyWqyuW_zZtgMhfz',
+    successResponse: {
+      fieldCount: 0,
+      affectedRows: 1,
+      insertId: 0,
+      serverStatus: 2,
+      warningCount: 0,
+      message: '(Rows matched: 1 Changed: 0 Warnings: 0',
+      protocol41: true,
+      changedRows: 0
+    },
+    failureResponse: {
+      fieldCount: 0,
+      affectedRows: 0,
+      insertId: 0,
+      serverStatus: 2,
+      warningCount: 0,
+      message: '(Rows matched: 0 Changed: 0 Warnings: 0',
+      protocol41: true,
+      changedRows: 0
+    }
+  },
   ownerViewPendingRequests: {
     url:
       'http://ec2-18-220-207-53.us-east-2.compute.amazonaws.com/agritech/ownerReservationsByCNIC.php',
